@@ -1,0 +1,7 @@
+{
+    "host": "localhost",
+    "user": "root",
+    "password": "ddd13131313",
+    "database": "xinxi",
+    "port":"3306"
+}
