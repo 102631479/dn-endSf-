@@ -77,10 +77,21 @@ let {
 // })
 
 
+
 let dataModel = () => {
     return async (req, res) => {
-        let [err, data] = await to(Db.select('SELECT * FROM `user`order by id desc'))
-        err ? ERROR(res, '数据查询失败', err) : SUCCESS(res, data);
+        console.log(req.query.phone);
+        console.log(typeof (req.query.phone));
+        console.log(req.query.phone == "");
+        // console.log(req.query.phone);
+        if (req.query.phone) {
+            let [err, data] = await to(Db.select(`SELECT * FROM user WHERE phone like "%${req.query.phone}%"`))
+            err ? ERROR(res, '数据查询失败2', err) : SUCCESS(res, data);
+        } else {
+            let [err, data] = await to(Db.select('SELECT * FROM `user`order by id desc'))
+            err ? ERROR(res, '数据查询失败1', err) : SUCCESS(res, data);
+        }
+
     }
 }
 router.get('/data', dataModel());
