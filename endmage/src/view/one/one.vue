@@ -7,7 +7,7 @@
             </el-input>
         </div>
 
-        <el-dialog title="物流记录" :visible.sync="showLogistics" width="30%" center >
+        <el-dialog title="物流记录" :visible.sync="showLogistics" width="30%" center>
             <div class="block">
                 <div class="block-img">
                     <img :src="logisticsDatatext.result.logo ? logisticsDatatext.result.logo : ''" alt="" class="logoimg" />
@@ -49,7 +49,7 @@
             </span>
         </el-dialog>
 
-        <el-table :data="tableData" style="width: 100%" size="mini">
+        <el-table :data="tableData" style="width: 100%" size="mini" v-loading="loading">
             <el-table-column type="index" width="50" label="序列"> </el-table-column>
             <el-table-column align="center" width="110" prop="datatime" label="时间"> </el-table-column>
             <el-table-column align="center" width="60" prop="name" label="姓名"> </el-table-column>
@@ -71,11 +71,11 @@
 </template>
 
 <script>
-import { data, dataadd, getLogisticsData } from '../../api/login';
-
+import { data, dataadd, getLogisticsData, getLogistics } from '../../api/login';
 export default {
     data() {
         return {
+            loading: false,
             input3: '',
             reverse: false,
             showLogistics: false,
@@ -87,9 +87,7 @@ export default {
                     type: 'zto',
                     typename: '中通速递',
                     logo: '',
-                    list: [
-                        
-                    ],
+                    list: [],
                     deliverystatus: 1,
                     issign: 0
                 }
@@ -128,11 +126,9 @@ export default {
             let _hour = 10 > now.getHours() ? '0' + now.getHours() : now.getHours();
             let _minute = 10 > now.getMinutes() ? '0' + now.getMinutes() : now.getMinutes();
             let _second = 10 > now.getSeconds() ? '0' + now.getSeconds() : now.getSeconds();
-            this.form.datatime = _month + '-' + _day + ' ' + _hour + ':' + _minute ;
+            this.form.datatime = _month + '-' + _day + ' ' + _hour + ':' + _minute;
         },
-
         getdataTexe() {
-            // console.log('sss');
             this.getData();
         },
         getDataset() {
@@ -140,23 +136,35 @@ export default {
                 this.centerDialogVisible = false;
                 return;
             }
+            this.loading = true;
             this.nowTime();
             dataadd(this.form)
                 .then((res) => {
                     this.getData();
-                    // this.tableData.push(JSON.parse(JSON.stringify(this.form)));
-                    // this.centerDialogVisible = false;
                     this.$refs.form.resetFields();
                     console.log(res);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
+            this.loading = false;
         },
         handleClick(d) {
             console.log(d);
         },
-
+        setGetLogistics(data, id) {
+            getLogistics({
+                ['logisticsdata']: data,
+                ['id']: id
+            })
+                .then((res) => {
+                    this.getData();
+                    // console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
         getLogisticsDatas(d) {
             console.log(d);
             getLogisticsData({
@@ -165,23 +173,29 @@ export default {
                 type: 'auto'
             })
                 .then((res) => {
-                    console.log(res.result);
+                    // console.log(res.result.list[0]);
                     (this.logisticsDatatext = {}), (this.logisticsDatatext = res);
                     this.showLogistics = true;
+                    let text = `${res.result.list[0].time}-${res.result.list[0].status}`;
+                    // console.log(text);
+                    // console.log(d.id, 'ssss');
+                    this.setGetLogistics(text, d.id);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         },
         async getData() {
+            this.loading = true;
             await data()
                 .then((res) => {
                     this.tableData = res.data;
-                    console.log(res.data);
+                    // console.log(res.data);
                 })
                 .catch((err) => {
                     console.log(err);
                 });
+            this.loading = false;
         }
     },
     created() {

@@ -1,129 +1,214 @@
 <template>
-  <div class="mix">
-    <div v-if="ruleForm.name == ''">
-      <el-input style="width: 200px" v-model="textname"></el-input>
-      <el-button type="primary" @click="submitName">设置名称</el-button>
-    </div>
-
-    <div v-if="!ruleForm.name == ''">
-      <el-button type="primary" @click="submitnamenull">重置名字</el-button>
-
-      <!-- <div class="imgs">
-        <img src="../../../../img/cts-loginbg（1）.jpeg" alt="" />
-      </div> -->
-
-      <div class="xinxi" ref="chatbox">
-        <div v-for="item in data" :key="item.id" style="height: 50px">
-          <div>----------{{ item.name }}-----------</div>
-          <span>{{ item.time }}</span
-          ><span>-------</span><span>{{ item.text }}</span>
-          <div style="width: 500px; height: 80px"></div>
+    <div>
+        <div class="heard">
+          <div></div>
+            <!-- <el-button type="primary" mini @click="centerDialogVisible = true">新增</el-button> -->
+            <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
+                <el-button slot="append" @click="getdataTexe()" icon="el-icon-search"></el-button>
+            </el-input>
         </div>
-      </div>
 
-      <div class="xinxian">
-        <el-input v-model="ruleForm.text"></el-input>
-        <el-button type="primary" @click="submitFormsss">刷新消息</el-button>
-        <el-button type="primary" @click="submitForm">发送</el-button>
-      </div>
+        <el-dialog title="物流记录" :visible.sync="showLogistics" width="30%" center>
+            <div class="block">
+                <div class="block-img">
+                    <img :src="logisticsDatatext.result.logo ? logisticsDatatext.result.logo : ''" alt="" class="logoimg" />
+                    {{ logisticsDatatext.result.typename }}
+                </div>
+                <el-timeline :reverse="reverse">
+                    <el-timeline-item v-for="(activity, index) in logisticsDatatext.result.list" :key="index" :timestamp="activity.status">
+                        {{ activity.time }}
+                    </el-timeline-item>
+                </el-timeline>
+            </div>
+        </el-dialog>
+
+        <el-dialog title="新增记录" :visible.sync="centerDialogVisible" width="30%" center>
+            <el-form ref="form" :model="form" label-width="80px" :rules="rules">
+                <el-form-item label="姓名" prop="name">
+                    <el-input v-model="form.name"></el-input>
+                </el-form-item>
+                <el-form-item label="电话" prop="phone">
+                    <el-input v-model="form.phone"></el-input>
+                </el-form-item>
+                <el-form-item label="商品" prop="shopname">
+                    <el-input v-model="form.shopname"></el-input>
+                </el-form-item>
+                <el-form-item label="物流单号" prop="logistics">
+                    <el-input v-model="form.logistics"></el-input>
+                </el-form-item>
+                <el-form-item label="备注" prop="remark">
+                    <el-input v-model="form.remark"></el-input>
+                </el-form-item>
+                <el-form-item label="下单价格" prop="goPrice">
+                    <el-input v-model="form.goPrice"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="getDataset(form)">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <el-table :data="tableData" style="width: 100%" size="mini" v-loading="loading">
+            <el-table-column type="index" width="50" label="序列"> </el-table-column>
+            <el-table-column align="center" width="110" prop="datatime" label="时间"> </el-table-column>
+            <el-table-column align="center" width="60" prop="name" label="姓名"> </el-table-column>
+            <el-table-column align="center" width="120" prop="phone" label="电话"> </el-table-column>
+            <el-table-column align="center" width="120" prop="shopname" label="订单编号"> </el-table-column>
+            <el-table-column align="center" width="150" prop="logistics" label="物流单号"> </el-table-column>
+            <el-table-column align="center" prop="logisticsdata" label="物流简述"> </el-table-column>
+            <el-table-column align="center" prop="remark" label="备注"> </el-table-column>
+            <el-table-column align="center" width="60" prop="goPrice" label="价格"> </el-table-column>
+            <el-table-column align="center" label="操作">
+                <template slot-scope="scope">
+                 
+                    <el-button type="text" size="small">永久删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
     </div>
-  </div>
 </template>
 
 <script>
-import { text, data } from "../../api/login";
-
+import { data, dataadd, getLogisticsData } from '../../api/login';
 export default {
-  data() {
-    return {
-      textname: "",
-      data: [],
-      ruleForm: {
-        name: "",
-        text: "",
-        time: "",
-      },
-    };
-  },
-  created() {
-    this.getdata();
-  },
-  methods: {
-    submitnamenull() {
-      this.ruleForm.name = "";
-      this.textname = "";
+    data() {
+        return {
+            loading: false,
+            input3: '',
+            reverse: false,
+            showLogistics: false,
+            logisticsDatatext: {
+                status: 0,
+                msg: 'ok',
+                result: {
+                    number: '75476195407404',
+                    type: 'zto',
+                    typename: '中通速递',
+                    logo: '',
+                    list: [],
+                    deliverystatus: 1,
+                    issign: 0
+                }
+            },
+            rules: {
+                name: [{ message: '请输入邮箱地址', required: false, trigger: 'blur' }],
+                phone: [{ message: '请输入邮箱地址', required: false, trigger: 'blur' }],
+                shopname: [{ message: '请输入邮箱地址', required: false, trigger: 'blur' }],
+                name: [{ message: '请输入邮箱地址', required: false, trigger: 'blur' }],
+                logistics: [{ message: '请输入邮箱地址', required: false, trigger: 'blur' }],
+                remark: [{ message: '请输入邮箱地址', required: false, trigger: 'blur' }],
+                goPrice: [{ message: '请输入邮箱地址', required: false, trigger: 'blur' }]
+            },
+            form: {
+                name: '',
+                phone: '',
+                shopname: '',
+                logistics: '',
+                remark: '',
+                goPrice: '',
+                datatime: '',
+                logisticsdata: '',
+                datatime: ''
+            },
+            centerDialogVisible: false,
+            tableData: []
+        };
     },
+    mounted() {},
+    methods: {
+        nowTime() {
+            //获取当前时间
+            let now = new Date();
+            let _month = 10 > now.getMonth() + 1 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1;
+            let _day = 10 > now.getDate() ? '0' + now.getDate() : now.getDate();
+            let _hour = 10 > now.getHours() ? '0' + now.getHours() : now.getHours();
+            let _minute = 10 > now.getMinutes() ? '0' + now.getMinutes() : now.getMinutes();
+            let _second = 10 > now.getSeconds() ? '0' + now.getSeconds() : now.getSeconds();
+            this.form.datatime = _month + '-' + _day + ' ' + _hour + ':' + _minute;
+        },
+        getdataTexe() {
+            this.getData();
+        },
+        getDataset() {
+            if (this.form.name == '') {
+                this.centerDialogVisible = false;
+                return;
+            }
+            this.loading = true;
+            this.nowTime();
+            dataadd(this.form)
+                .then((res) => {
+                    this.getData();
+                    this.$refs.form.resetFields();
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            this.loading = false;
+        },
+        handleClick(d) {
+            console.log(d);
+        },
 
-    submitName() {
-      this.ruleForm.name = JSON.parse(JSON.stringify(this.textname));
+        getLogisticsDatas(d) {
+            console.log(d);
+            getLogisticsData({
+                mobile: d.phone,
+                number: d.logistics,
+                type: 'auto'
+            })
+                .then((res) => {
+                    // console.log(res.result);
+                    (this.logisticsDatatext = {}), (this.logisticsDatatext = res);
+                    this.showLogistics = true;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        async getData() {
+            this.loading = true;
+            await data()
+                .then((res) => {
+                    this.tableData = res.data;
+                    console.log(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            this.loading = false;
+        }
     },
-
-    submitFormsss() {
-      this.getdata();
-    },
-
-    async getdata() {
-      await data()
-        .then((res) => {
-            console.log(res);
-          this.data = res.data;
-          setTimeout((this.$refs.chatbox.scrollTop = 99999), 20);
-          //   console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    time() {
-      var myDate = new Date();
-      var date = myDate.toLocaleTimeString();
-      this.ruleForm.time = date;
-    },
-    async submitForm() {
-      if (this.ruleForm.text == "") return;
-      await this.time();
-      await text(this.ruleForm)
-        .then((res) => {
-          this.ruleForm.text = "";
-          console.log(res, "请求已经发送");
-          this.getdata();
-        })
-        .catch((err) => {
-          this.ruleForm.text = "";
-          console.log("请求失败");
-        });
-    },
-  },
+    created() {
+        this.getData();
+    }
 };
 </script>
 
 <style scoped>
-.mix {
-  overflow: hidden;
+.input-with-select {
+    width: 300px;
 }
-.xinxi {
-  overflow: auto;
-  overflow-x: hidden;
-  width: 500px;
-  height: 500px;
-  border: salmon 1px solid;
-  overflow-y: scroll;
-  /* margin: 0 auto; */
-  /* margin-top: 110px; */
+.heard {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    /* height: 50px; */
 }
-.xinxian {
-  height: 100px;
-  width: 500px;
-  border: salmon 1px solid;
-  /* margin: 0 auto; */
+.block-img {
+    height: 35px;
+    margin: 0 auto;
 }
-.imgs {
-  /* margin: 0 auto; */
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: -1;
+.logoimg {
+    width: 10px;
+    height: 10px;
+}
+#main {
+    width: 100px;
+    height: 100px;
+    background-color: red;
 }
 </style>

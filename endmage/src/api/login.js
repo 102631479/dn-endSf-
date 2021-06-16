@@ -2,6 +2,7 @@ import request from '../utils/request';
 
 
 export const getLogisticsData = data => {
+    console.log(data,'ssssssss');
     return request({
         url: '/logisticsdata',
         method: 'get',
@@ -22,13 +23,13 @@ export const dataadd = data => {
     });
 };
 
-// export const text = data => {
-//     return request({
-//         url: '/text',
-//         method: 'get',
-//         params: data
-//     });
-// };
+export const getLogistics = data => {
+    return request({
+        url: '/getLogistics',
+        method: 'get',
+        params: data
+    });
+};
 // 获取账户信息
 // export async function getUserData() {
 //     let res = await get("/usersdata");

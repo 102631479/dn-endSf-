@@ -23,18 +23,18 @@ app.use(cookieParser());
 //指定静态资源
 app.use(express.static(path.join(__dirname, 'public')));
 
-// var indexRouter = require('./routes/index');
+var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
-var cookieRouter = require('./routes/cookie');
+var logisticsdataRouter = require('./routes/logisticsdata');
 // var mysqlRouter = require('./routes/sql');
 var addUserRouter = require('./routes/addUser');
 // var uploadImgRouter = require('./routes/multer');
 // var loginRouter = require('./routes/login');
 // var numRouter = require('./routes/num');
 
-// app.use('/', indexRouter);
+app.use('/', indexRouter);
 // app.use('/', usersRouter);
-app.use('/', cookieRouter);
+app.use('/', logisticsdataRouter);
 // app.use('/', mysqlRouter);
 app.use('/', addUserRouter);
 // app.use('/', loginRouter);
