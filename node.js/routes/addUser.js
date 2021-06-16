@@ -79,7 +79,7 @@ let {
 
 let dataModel = () => {
     return async (req, res) => {
-        let [err, data] = await to(Db.select('SELECT * FROM `user`'))
+        let [err, data] = await to(Db.select('SELECT * FROM `user`order by id desc'))
         err ? ERROR(res, '数据查询失败', err) : SUCCESS(res, data);
     }
 }

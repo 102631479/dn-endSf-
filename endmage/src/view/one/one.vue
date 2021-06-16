@@ -7,10 +7,11 @@
             </el-input>
         </div>
 
-        <el-dialog title="物流记录" :visible.sync="showLogistics" width="30%" center>
+        <el-dialog title="物流记录" :visible.sync="showLogistics" width="30%" center >
             <div class="block">
                 <div class="block-img">
-                    <img :src="logisticsDatatext.result.logo" alt="" class="logoimg" /> {{ logisticsDatatext.result.typename }}
+                    <img :src="logisticsDatatext.result.logo ? logisticsDatatext.result.logo : ''" alt="" class="logoimg" />
+                    {{ logisticsDatatext.result.typename }}
                 </div>
                 <el-timeline :reverse="reverse">
                     <el-timeline-item v-for="(activity, index) in logisticsDatatext.result.list" :key="index" :timestamp="activity.status">
@@ -50,7 +51,7 @@
 
         <el-table :data="tableData" style="width: 100%" size="mini">
             <el-table-column type="index" width="50" label="序列"> </el-table-column>
-            <el-table-column align="center" width="60" prop="datatime" label="时间"> </el-table-column>
+            <el-table-column align="center" width="110" prop="datatime" label="时间"> </el-table-column>
             <el-table-column align="center" width="60" prop="name" label="姓名"> </el-table-column>
             <el-table-column align="center" width="120" prop="phone" label="电话"> </el-table-column>
             <el-table-column align="center" width="120" prop="shopname" label="订单编号"> </el-table-column>
@@ -76,7 +77,7 @@ export default {
     data() {
         return {
             input3: '',
-            reverse: true,
+            reverse: false,
             showLogistics: false,
             logisticsDatatext: {
                 status: 0,
@@ -85,16 +86,9 @@ export default {
                     number: '75476195407404',
                     type: 'zto',
                     typename: '中通速递',
-                    logo: 'https://api.jisuapi.com/express/static/images/logo/80/zto.png',
+                    logo: '',
                     list: [
-                        { time: '2021-06-13 15:47:32', status: '【郑州市】 快件离开 【郑州中转】 已发往 【郑州合盛】' },
-                        { time: '2021-06-13 15:11:13', status: '【郑州市】 快件已经到达 【郑州中转】' },
-                        { time: '2021-06-12 20:25:34', status: '【嘉兴市】 快件离开 【杭州中转部】 已发往 【郑州中转】' },
-                        { time: '2021-06-12 05:06:03', status: '【嘉兴市】 快件已经到达 【杭州中转部】' },
-                        { time: '2021-06-12 00:25:09', status: '【绍兴市】 快件离开 【绍兴中转部】 已发往 【杭州中转部】' },
-                        { time: '2021-06-11 23:54:12', status: '【绍兴市】 快件已经到达 【绍兴中转部】' },
-                        { time: '2021-06-11 20:23:37', status: '【绍兴市】 快件离开 【绍兴诸暨】 已发往 【郑州中转】' },
-                        { time: '2021-06-11 20:15:03', status: '【绍兴市】 【绍兴诸暨】（0575-84964067） 的 公司1（15395751051） 已揽收' }
+                        
                     ],
                     deliverystatus: 1,
                     issign: 0
@@ -117,7 +111,8 @@ export default {
                 remark: '',
                 goPrice: '',
                 datatime: '',
-                logisticsdata: ''
+                logisticsdata: '',
+                datatime: ''
             },
             centerDialogVisible: false,
             tableData: []
@@ -125,6 +120,17 @@ export default {
     },
     mounted() {},
     methods: {
+        nowTime() {
+            //获取当前时间
+            let now = new Date();
+            let _month = 10 > now.getMonth() + 1 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1;
+            let _day = 10 > now.getDate() ? '0' + now.getDate() : now.getDate();
+            let _hour = 10 > now.getHours() ? '0' + now.getHours() : now.getHours();
+            let _minute = 10 > now.getMinutes() ? '0' + now.getMinutes() : now.getMinutes();
+            let _second = 10 > now.getSeconds() ? '0' + now.getSeconds() : now.getSeconds();
+            this.form.datatime = _month + '-' + _day + ' ' + _hour + ':' + _minute ;
+        },
+
         getdataTexe() {
             // console.log('sss');
             this.getData();
@@ -134,7 +140,7 @@ export default {
                 this.centerDialogVisible = false;
                 return;
             }
-
+            this.nowTime();
             dataadd(this.form)
                 .then((res) => {
                     this.getData();
@@ -152,13 +158,16 @@ export default {
         },
 
         getLogisticsDatas(d) {
+            console.log(d);
             getLogisticsData({
                 mobile: d.phone,
                 number: d.logistics,
                 type: 'auto'
             })
                 .then((res) => {
-                    console.log(res);
+                    console.log(res.result);
+                    (this.logisticsDatatext = {}), (this.logisticsDatatext = res);
+                    this.showLogistics = true;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -177,8 +186,6 @@ export default {
     },
     created() {
         this.getData();
-        console.log(getLogisticsData());
-        // this. getLogisticsDatas();
     }
 };
 </script>
