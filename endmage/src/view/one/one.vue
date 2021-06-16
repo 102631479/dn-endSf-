@@ -181,13 +181,15 @@ export default {
                 type: 'auto'
             })
                 .then((res) => {
+                    console.log(res, '物流更新成功');
                     (this.logisticsDatatext = {}), (this.logisticsDatatext = res);
                     if (buler) this.showLogistics = true;
                     let text = `${res.result.list[0].time}-${res.result.list[0].status}`;
                     this.setGetLogistics(text, d.id, buler);
                 })
                 .catch((err) => {
-                    console.log(err);
+                    this.$message.error('物流更新失败');
+                    console.log(err, '物流更新失败');
                 });
         },
         async getData() {
