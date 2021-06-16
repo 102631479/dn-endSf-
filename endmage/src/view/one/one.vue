@@ -57,12 +57,13 @@
             <el-table-column align="center" width="120" prop="shopname" label="订单编号"> </el-table-column>
             <el-table-column align="center" width="150" prop="logistics" label="物流单号"> </el-table-column>
             <el-table-column align="center" prop="logisticsdata" label="物流简述"> </el-table-column>
-            <el-table-column align="center" prop="remark" label="备注"> </el-table-column>
+            <el-table-column align="center" prop="remark" width="100" label="备注"> </el-table-column>
             <el-table-column align="center" width="60" prop="goPrice" label="价格"> </el-table-column>
-            <el-table-column align="center" label="操作">
+            <el-table-column align="center" label="操作" width="300">
                 <template slot-scope="scope">
                     <el-button type="text" size="small">编辑</el-button>
-                    <el-button type="text" size="small" @click="getLogisticsDatas(scope.row)">查看物流</el-button>
+                    <el-button type="text" size="small" @click="getLogisticsDatas(scope.row, true)">查看物流</el-button>
+                    <el-button type="text" size="small" @click="getLogisticsDatas(scope.row, false)">物流更新</el-button>
                     <el-button type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
@@ -152,20 +153,27 @@ export default {
         handleClick(d) {
             console.log(d);
         },
-        setGetLogistics(data, id) {
+        setGetLogistics(data, id, buler) {
             getLogistics({
                 ['logisticsdata']: data,
                 ['id']: id
             })
                 .then((res) => {
+                    if (!buler) {
+                        this.$message({
+                            message: '物流更新完成',
+                            type: 'success'
+                        });
+                    }
                     this.getData();
                     // console.log(res);
                 })
                 .catch((err) => {
-                    console.log(err);
+                    this.$message.error('物流更新失败');
+                    // console.log(err);
                 });
         },
-        getLogisticsDatas(d) {
+        getLogisticsDatas(d, buler) {
             console.log(d);
             getLogisticsData({
                 mobile: d.phone,
@@ -173,13 +181,10 @@ export default {
                 type: 'auto'
             })
                 .then((res) => {
-                    // console.log(res.result.list[0]);
                     (this.logisticsDatatext = {}), (this.logisticsDatatext = res);
-                    this.showLogistics = true;
+                    if (buler) this.showLogistics = true;
                     let text = `${res.result.list[0].time}-${res.result.list[0].status}`;
-                    // console.log(text);
-                    // console.log(d.id, 'ssss');
-                    this.setGetLogistics(text, d.id);
+                    this.setGetLogistics(text, d.id, buler);
                 })
                 .catch((err) => {
                     console.log(err);
