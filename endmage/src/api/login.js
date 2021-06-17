@@ -2,17 +2,17 @@ import request from '../utils/request';
 
 
 export const getLogisticsData = data => {
-    console.log(data,'ssssssss');
     return request({
         url: '/logisticsdata',
         method: 'get',
         params: data
     });
 };
-export const data = () => {
+export const data = (data) => {
     return request({
         url: '/data',
         method: 'get',
+        params: data
     });
 };
 export const dataadd = data => {

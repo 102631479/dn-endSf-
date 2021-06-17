@@ -2,7 +2,7 @@
     <div>
         <div class="heard">
             <el-button type="primary" mini @click="centerDialogVisible = true">新增</el-button>
-            <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
+            <el-input placeholder="请输入内容" v-model="phoneCode" class="input-with-select">
                 <el-button slot="append" @click="getdataTexe()" icon="el-icon-search"></el-button>
             </el-input>
         </div>
@@ -36,16 +36,16 @@
                     <el-input v-model="form.logistics"></el-input>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
-                    <el-input v-model="form.remark"></el-input>
+                    <el-input v-model="form.remark" ></el-input>
                 </el-form-item>
                 <el-form-item label="下单价格" prop="goPrice">
-                    <el-input v-model="form.goPrice"></el-input>
+                    <el-input v-model="form.goPrice" @keyup.enter.native="getDataset(form)"></el-input>
                 </el-form-item>
             </el-form>
 
             <span slot="footer" class="dialog-footer">
                 <el-button @click="centerDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="getDataset(form)">确 定</el-button>
+                <el-button type="primary"  @click="getDataset(form)">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -84,9 +84,9 @@ export default {
                 status: 0,
                 msg: 'ok',
                 result: {
-                    number: '75476195407404',
-                    type: 'zto',
-                    typename: '中通速递',
+                    number: '',
+                    type: '',
+                    typename: '',
                     logo: '',
                     list: [],
                     deliverystatus: 1,
@@ -113,11 +113,20 @@ export default {
                 logisticsdata: '',
                 datatime: ''
             },
+            phoneCode: '',
             centerDialogVisible: false,
             tableData: []
         };
     },
     mounted() {},
+    watch: {
+        phoneCode(val, vul) {
+            console.log(val, vul);
+            this.getData({
+                phone: val
+            });
+        }
+    },
     methods: {
         nowTime() {
             //获取当前时间
@@ -130,7 +139,9 @@ export default {
             this.form.datatime = _month + '-' + _day + ' ' + _hour + ':' + _minute;
         },
         getdataTexe() {
-            this.getData();
+            this.getData({
+                phone: this.phoneCode
+            });
         },
         getDataset() {
             if (this.form.name == '') {
@@ -141,12 +152,14 @@ export default {
             this.nowTime();
             dataadd(this.form)
                 .then((res) => {
-                    this.getData();
+                    this.getData({
+                        phone: this.phoneCode
+                    });
                     this.$refs.form.resetFields();
                     console.log(res);
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.l401og(err);
                 });
             this.loading = false;
         },
@@ -154,6 +167,7 @@ export default {
             console.log(d);
         },
         setGetLogistics(data, id, buler) {
+            let _this = this;
             getLogistics({
                 ['logisticsdata']: data,
                 ['id']: id
@@ -165,7 +179,9 @@ export default {
                             type: 'success'
                         });
                     }
-                    this.getData();
+                    this.getData({
+                        phone: _this.phoneCode
+                    });
                     // console.log(res);
                 })
                 .catch((err) => {
@@ -192,9 +208,9 @@ export default {
                     console.log(err, '物流更新失败');
                 });
         },
-        async getData() {
+        async getData(d) {
             this.loading = true;
-            await data()
+            await data(d)
                 .then((res) => {
                     this.tableData = res.data;
                     // console.log(res.data);
@@ -206,7 +222,7 @@ export default {
         }
     },
     created() {
-        this.getData();
+        this.getData(this.phoneCode);
     }
 };
 </script>
