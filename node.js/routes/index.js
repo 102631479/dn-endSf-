@@ -30,4 +30,7 @@ router.get('/oneupdata', updata())
 
 
 
+
+
+
 module.exports = router;

@@ -8,14 +8,7 @@ let { SUCCESS, ERROR, } = require('../utils/result');//结果
 let { getuid } = require('../utils/tablefuntion')
 
 // 登录
-let login = () => {
-    return async (req, res) => {
-        let [err, data] = await to(Db.select(`SELECT * FROM user WHERE user="${req.body.user}"`))
-        data.length >= 1 ? SUCCESS(res, data) : ERROR(res, '没有该用户请注册', err);
-    }
-}
 
-router.post('/login', login())
 
 
 

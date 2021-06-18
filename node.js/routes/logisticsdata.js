@@ -12,7 +12,6 @@ router.get('/logisticsdata', (req, res) => {
         url: url,
         method: 'GET',
         headers: headers,
-
     }
     request(options, function (error, response, body) {
         if (error !== null) {

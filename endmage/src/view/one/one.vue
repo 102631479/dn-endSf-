@@ -36,7 +36,7 @@
                     <el-input v-model="form.logistics"></el-input>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
-                    <el-input v-model="form.remark" ></el-input>
+                    <el-input v-model="form.remark"></el-input>
                 </el-form-item>
                 <el-form-item label="下单价格" prop="goPrice">
                     <el-input v-model="form.goPrice" @keyup.enter.native="getDataset(form)"></el-input>
@@ -45,7 +45,7 @@
 
             <span slot="footer" class="dialog-footer">
                 <el-button @click="centerDialogVisible = false">取 消</el-button>
-                <el-button type="primary"  @click="getDataset(form)">确 定</el-button>
+                <el-button type="primary" @click="getDataset(form)">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -222,7 +222,9 @@ export default {
         }
     },
     created() {
-        this.getData(this.phoneCode);
+        this.getData({
+            phone: this.phoneCode
+        });
     }
 };
 </script>
