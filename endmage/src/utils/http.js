@@ -7,7 +7,12 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 //http request 拦截器
 axios.interceptors.request.use(
+
+
+
     config => {
+        console.log('ssss');
+       
         let token = sessionStorage.getItem('token');
         if (token) {
             // 判断是否存在token，如果存在的话，则每个http header都加上token
@@ -19,6 +24,7 @@ axios.interceptors.request.use(
         return config;
     },
     err => {
+        console.log('sss');
         return Promise.reject(err);
     }
 );
@@ -26,6 +32,7 @@ axios.interceptors.request.use(
 //请求返回时的拦截器。
 axios.interceptors.response.use(
     response => {
+        console.log('sss');
         if (response.data.code === 4003) {
             Toast({
                 mes: '您没有权限操作！',

@@ -4,19 +4,19 @@
             <div class="ms-title">后台管理系统</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="username">
+                    <el-input v-model="param.username" placeholder="账号">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" placeholder="password" v-model="param.password" @keyup.enter.native="submitForm()">
+                    <el-input type="password" placeholder="密码" v-model="param.password" @keyup.enter.native="submitForm()">
                         <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                     </el-input>
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <p class="login-tips">Tips : 物流监控</p>
             </el-form>
         </div>
     </div>
@@ -24,18 +24,31 @@
 
 <script>
 export default {
-    created() {
-        // this.$router.push('/');
-        this.submitForm();
-    },
-    mounted() {
-        this.submitForm();
-    },
+    created() {},
+    mounted() {},
     data: function () {
         return {
+            usercode: [
+                {
+                    username: '18300692207',
+                    password: '000000'
+                },
+                {
+                    username: '18838107384',
+                    password: '000000'
+                },
+                {
+                    username: '15539738215',
+                    password: '000000'
+                },
+                {
+                    username: '18749282812',
+                    password: '000000'
+                }
+            ],
             param: {
-                username: '物流管理',
-                password: 'sss'
+                username: '',
+                password: ''
             },
             rules: {
                 username: [
@@ -56,32 +69,36 @@ export default {
         };
     },
     methods: {
-        submitForm() {
-            this.$refs.login.validate((valid) => {
-                if (valid) {
-                    this.$message.success('登录成功');
-                    localStorage.setItem('ms_username', this.param.username);
-                    this.$router.push('/');
-                } else {
-                    this.$message.error('请输入账号和密码');
-                    console.log('error submit!!');
-                    return false;
+        async submitForm() {
+            var result = this.usercode.some((item) => {
+                if (item.username == this.param.username) {
+                    return true;
                 }
             });
-
-            // this.$post(url, params)
-            //     .then((res) => {
-            //         if (res.result === 'success') {
-            //             this.$message({
-            //                 message: '登录成功！',
-            //                 type: 'success'
-            //             })
-            //             this.$router.push('/main')
-            //         } else {
-            //             this.$message.error(res.msg)
-            //             this.refreshCode();
-            //         }
-            //     });
+            if (!result) {
+                this.$message.error('没有该用户');
+                return;
+            }
+            await this.usercode.map((item, index) => {
+                if (item.username == this.param.username) {
+                    if (this.param.password == item.password) {
+                        this.$refs.login.validate((valid) => {
+                            if (valid) {
+                                this.$message.success('登录成功');
+                                localStorage.setItem('ms_username', this.param.username);
+                                this.$router.push('/');
+                            } else {
+                                this.$message.error('请输入账号和密码');
+                                console.log('error submit!!');
+                                return false;
+                            }
+                        });
+                    } else {
+                        this.$message.error('密码错误');
+                    }
+                }
+            });
+            dd;
         }
     }
 };

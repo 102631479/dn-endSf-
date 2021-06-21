@@ -9,6 +9,14 @@ const service = axios.create({
 
 service.interceptors.request.use(
     config => {
+        if (localStorage.getItem('ms_username')) {
+            console.log('有id');
+
+        } else {
+            this.$router.push('/login');
+            console.log('没有id');
+        }
+        console.log('请求拦截');
         return config;
     },
     error => {

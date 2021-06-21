@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="heard">
-            <el-button type="primary" mini @click="centerDialogVisible = true">新增</el-button>
+            <el-button type="primary" mini @click="addData">新增</el-button>
             <el-input placeholder="请输入内容" v-model="phoneCode" class="input-with-select">
-                <el-button slot="append" @click="getdataTexe()" icon="el-icon-search"></el-button>
+                <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>
         </div>
 
@@ -21,22 +21,22 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="新增记录" :visible.sync="centerDialogVisible" width="30%" center>
+        <el-dialog :title="setdata ? '新增数据' : '编辑数据'" :visible.sync="centerDialogVisible" width="30%" center>
             <el-form ref="form" :model="form" label-width="80px" :rules="rules">
                 <el-form-item label="姓名" prop="name">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form.name" @keyup.enter.native="getDataset(form)"></el-input>
                 </el-form-item>
                 <el-form-item label="电话" prop="phone">
-                    <el-input v-model="form.phone"></el-input>
+                    <el-input v-model="form.phone" @keyup.enter.native="getDataset(form)"></el-input>
                 </el-form-item>
-                <el-form-item label="商品" prop="shopname">
-                    <el-input v-model="form.shopname"></el-input>
+                <el-form-item label="订单编号" prop="shopname">
+                    <el-input v-model="form.shopname" @keyup.enter.native="getDataset(form)"></el-input>
                 </el-form-item>
                 <el-form-item label="物流单号" prop="logistics">
-                    <el-input v-model="form.logistics"></el-input>
+                    <el-input v-model="form.logistics" @keyup.enter.native="getDataset(form)"></el-input>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
-                    <el-input v-model="form.remark"></el-input>
+                    <el-input v-model="form.remark" @keyup.enter.native="getDataset(form)"></el-input>
                 </el-form-item>
                 <el-form-item label="下单价格" prop="goPrice">
                     <el-input v-model="form.goPrice" @keyup.enter.native="getDataset(form)"></el-input>
@@ -61,10 +61,10 @@
             <el-table-column align="center" width="60" prop="goPrice" label="价格"> </el-table-column>
             <el-table-column align="center" label="操作" width="300">
                 <template slot-scope="scope">
-                    <el-button type="text" size="small">编辑</el-button>
+                    <el-button type="text" size="small" @click="eilitData(scope.row)">编辑</el-button>
                     <el-button type="text" size="small" @click="getLogisticsDatas(scope.row, true)">查看物流</el-button>
                     <el-button type="text" size="small" @click="getLogisticsDatas(scope.row, false)">物流更新</el-button>
-                    <el-button type="text" size="small">删除</el-button>
+                    <el-button type="text" size="small" @click="getrecyledData(scope.row)">移入垃圾站</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -72,10 +72,11 @@
 </template>
 
 <script>
-import { data, dataadd, getLogisticsData, getLogistics } from '../../api/login';
+import { data, dataadd, getLogisticsData, getLogistics, getoneupdata, getrecyled } from '../../api/login';
 export default {
     data() {
         return {
+            setdata: true,
             loading: false,
             input3: '',
             reverse: false,
@@ -103,6 +104,8 @@ export default {
                 goPrice: [{ message: '请输入邮箱地址', required: false, trigger: 'blur' }]
             },
             form: {
+                id: '',
+                usercode: localStorage.getItem('ms_username'),
                 name: '',
                 phone: '',
                 shopname: '',
@@ -123,11 +126,55 @@ export default {
         phoneCode(val, vul) {
             console.log(val, vul);
             this.getData({
-                phone: val
+                usercode: localStorage.getItem('ms_username'),
+                phone: this.phoneCode
             });
         }
     },
     methods: {
+        getrecyledData(d) {
+            getrecyled(d)
+                .then((res) => {
+                    this.getData({
+                        usercode: localStorage.getItem('ms_username'),
+                        phone: this.phoneCode
+                    });
+                    this.$message({
+                        message: d.name + '加入回收站成功',
+                        type: 'success'
+                    });
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        clearData() {
+            this.form.name = '';
+            this.form.phone = '';
+            this.form.shopname = '';
+            this.form.remark = '';
+            this.form.goPrice = '';
+            this.form.logistics = '';
+        },
+        addData() {
+            this.clearData();
+            this.setdata = true;
+            this.centerDialogVisible = true;
+        },
+        eilitData(d) {
+            console.log(d);
+            this.clearData();
+            this.setdata = false;
+            this.centerDialogVisible = true;
+            this.form.name = d.name;
+            this.form.phone = d.phone;
+            this.form.shopname = d.shopname;
+            this.form.remark = d.remark;
+            this.form.goPrice = d.goPrice;
+            this.form.logistics = d.logistics;
+            this.form.id = d.id;
+        },
         nowTime() {
             //获取当前时间
             let now = new Date();
@@ -139,9 +186,10 @@ export default {
             this.form.datatime = _month + '-' + _day + ' ' + _hour + ':' + _minute;
         },
         getdataTexe() {
-            this.getData({
-                phone: this.phoneCode
-            });
+            console.log(localStorage.getItem('ms_username'), '缓存');
+            // this.getData({
+            //     phone: this.phoneCode
+            // });
         },
         getDataset() {
             if (this.form.name == '') {
@@ -150,23 +198,43 @@ export default {
             }
             this.loading = true;
             this.nowTime();
-            dataadd(this.form)
-                .then((res) => {
-                    this.getData({
-                        phone: this.phoneCode
+            console.log(this.form);
+            if (this.setdata) {
+                dataadd(this.form)
+                    .then((res) => {
+                        this.getData({
+                            usercode: localStorage.getItem('ms_username'),
+                            phone: this.phoneCode
+                        });
+                        this.clearData();
+                        console.log(res);
+                    })
+                    .catch((err) => {
+                        console.l401og(err);
                     });
-                    this.$refs.form.resetFields();
-                    console.log(res);
-                })
-                .catch((err) => {
-                    console.l401og(err);
-                });
+            } else {
+                getoneupdata(this.form)
+                    .then((res) => {
+                        this.getData({
+                            usercode: localStorage.getItem('ms_username'),
+                            phone: this.phoneCode
+                        });
+                        this.centerDialogVisible = false;
+                        this.clearData();
+                        console.log(res);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+
             this.loading = false;
         },
         handleClick(d) {
             console.log(d);
         },
         setGetLogistics(data, id, buler) {
+            console.log(data, id, buler, '记录');
             let _this = this;
             getLogistics({
                 ['logisticsdata']: data,
@@ -180,6 +248,7 @@ export default {
                         });
                     }
                     this.getData({
+                        usercode: localStorage.getItem('ms_username'),
                         phone: _this.phoneCode
                     });
                     // console.log(res);
@@ -190,23 +259,27 @@ export default {
                 });
         },
         getLogisticsDatas(d, buler) {
-            console.log(d);
-            getLogisticsData({
-                mobile: d.phone,
-                number: d.logistics,
-                type: 'auto'
-            })
-                .then((res) => {
-                    console.log(res, '物流更新成功');
-                    (this.logisticsDatatext = {}), (this.logisticsDatatext = res);
-                    if (buler) this.showLogistics = true;
-                    let text = `${res.result.list[0].time}-${res.result.list[0].status}`;
-                    this.setGetLogistics(text, d.id, buler);
+            if (!d.logistics) {
+                this.$message.error('没有物流单号');
+                return;
+            }
+            if (d.logistics)
+                getLogisticsData({
+                    mobile: d.phone,
+                    number: d.logistics,
+                    type: 'auto'
                 })
-                .catch((err) => {
-                    this.$message.error('物流更新失败');
-                    console.log(err, '物流更新失败');
-                });
+                    .then((res) => {
+                        console.log(res, '物流更新成功');
+                        (this.logisticsDatatext = {}), (this.logisticsDatatext = res);
+                        if (buler) this.showLogistics = true;
+                        let text = `${res.result.list[0].time}-${res.result.list[0].status}`;
+                        this.setGetLogistics(text, d.id, buler);
+                    })
+                    .catch((err) => {
+                        this.$message.error('物流更新失败');
+                        console.log(err, '物流更新失败');
+                    });
         },
         async getData(d) {
             this.loading = true;
@@ -223,6 +296,7 @@ export default {
     },
     created() {
         this.getData({
+            usercode: localStorage.getItem('ms_username'),
             phone: this.phoneCode
         });
     }

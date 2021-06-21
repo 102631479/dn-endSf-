@@ -58,6 +58,7 @@ export default {
                     index: 'dashboard',
                     title: '数据展示'
                 },
+                { icon: 'el-icon-lx-copy', index: 'editor', title: '云数据' },
                 {
                     icon: 'el-icon-lx-cascades',
                     index: 'table',
@@ -67,7 +68,7 @@ export default {
                     icon: 'el-icon-lx-copy',
                     index: 'tabs',
                     title: '垃圾站 '
-                },
+                }
                 // {      icon: 'el-icon-lx-copy',
                 //     index: 'editor',
                 //     title: '富文本编辑器'

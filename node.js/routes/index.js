@@ -20,17 +20,12 @@ router.get('/getLogistics', getLogistics())
 let updata = () => {
   return async (req, res) => {
     let updata = req.query
-    let [err, data] = await to(Db.select(`UPDATE user SET logisticsdata="${updata.logisticsdata}",name="${updata.name}", logistics="${updata.logistics}",phone="${updata.phone}",remark="${updata.remark}",shopname="${updata.shopname}", goPrice="${updata.goPrice}"WHERE id="${updata.id}"`))
+    console.log(updata);
+    let [err, data] = await to(Db.select(`UPDATE user SET name="${updata.name}", logistics="${updata.logistics}",phone="${updata.phone}",remark="${updata.remark}",shopname="${updata.shopname}", goPrice="${updata.goPrice}" WHERE id="${updata.id}" and usercode="${req.query.usercode}" `))
     err ? ERROR(res, '数据修改失败', err) : SUCCESS(res, 'sql修改', data);
   }
 }
 
 router.get('/oneupdata', updata())
-
-
-
-
-
-
 
 module.exports = router;

@@ -30,6 +30,34 @@ export const getLogistics = data => {
         params: data
     });
 };
+export const getoneupdata = data => {
+    return request({
+        url: '/oneupdata',
+        method: 'get',
+        params: data
+    });
+};
+export const getrecyled = data => {
+    return request({
+        url: '/recyled',
+        method: 'get',
+        params: data
+    });
+};
+export const getdataRecyled = data => {
+    return request({
+        url: '/dataRecyled',
+        method: 'get',
+        params: data
+    });
+};
+export const RETretureData = data => {
+    return request({
+        url: '/retureData',
+        method: 'get',
+        params: data
+    });
+};
 // 获取账户信息
 // export async function getUserData() {
 //     let res = await get("/usersdata");
