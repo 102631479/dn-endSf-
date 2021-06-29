@@ -1,0 +1,36 @@
+var express = require('express');
+var router = express.Router();
+const db = require("../utils/index");
+const path = require('path');
+var cheerio = require('cheerio');
+var superagent = require('superagent');
+router.get('/getdata', (req, res) => {
+    superagent.get('https://cnodejs.org/')
+        .end(function (err, sres) {
+            if (err) {
+                return next(err);
+            }
+            var $ = cheerio.load(sres.text);
+            var items = [];
+            $('#topic_list .topic_title').each(function (idx, element) {
+                // console.log(element,'element');
+                // console.log(idx,'idx');
+                var $element = $(element);
+                items.push({
+                    title: $element.attr('title'),
+                    href: $element.attr('href')
+                });
+            });
+
+            res.send(items);
+        });
+
+
+
+
+
+
+
+})
+
+module.exports = router;

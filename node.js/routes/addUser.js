@@ -9,84 +9,6 @@ let {
     ERROR
 } = require('../utils/result'); //结果
 
-// const bodyParser = require("body-parser");
-
-
-// router.post('/loginadd', (req, res) => {
-//     // console.log(req.body, 'req.body');
-//     // console.log(req, 'req.body');
-//     db.query('INSERT INTO xinxi (name,time) VALUE(?,?)', [req.body.name, req.body.time]).then(data => {
-//         res.status(200).send({
-//             msg: "成功",
-//             code: 200
-//         })
-//     }).catch(err => {
-//         res.send({
-//             msg: "失败",
-//             err
-//         })
-//     })
-// })
-
-
-// router.post('/loginadd', (req, res) => {
-//     Db.select('INSERT INTO xinxi (name,time) VALUE(?,?)', [req.body.name, req.body.time]).then(data => {
-//         res.status(200).send({
-//             msg: "成功",
-//             code: 200
-//         })
-//     }).catch(err => {
-//         res.send({
-//             msg: "失败",
-//             err
-//         })
-//     })
-// })
-
-
-
-// let textModel = () => {
-//     return async (req, res) => {
-//         let [err, data] = await to(Db.select('INSERT INTO xinxi (name,time,text) VALUE(?,?,?)', [req.query.name, req.query.time, req.query.text]))
-//         err ? ERROR(res, '信息发送失败', err) : SUCCESS(res, data);
-//     }
-// }
-// router.get('/text', textModel());
-
-
-
-// router.get('/data', (req, res) => {
-//     Db.select('SELECT * FROM xinxi').then(data => {
-//         res.status(200).send({ data })
-//     }).catch(err => {
-//         res.send({
-//             msg: "失败",
-//             err: "连接失败"
-//         })
-//     })
-// })
-
-
-
-
-// router.get('/text', async (req, res) => {
-// let [err, data] = await to(Db.select('INSERT INTO xinxi (name,time,text) VALUE(?,?,?)', [req.query.name, req.query.time, req.query.text]))
-// console.log(err, data, '我是err');
-// err ? ERROR(res, '轮播图查询失败', err) : SUCCESS(res, data);
-
-// .then(data => {
-//     res.status(200).send({
-//         msg: "成功",
-//         code: 200
-//     })
-// }).catch(err => {
-//     res.send({
-//         msg: "失败",
-//         err
-//     })
-// })
-// })
-
 
 // 查询
 let dataModel = () => {
@@ -169,3 +91,121 @@ let Retuedata = () => {
 router.get('/retureData', Retuedata());
 
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// router.post('/loginadd', (req, res) => {
+//     // console.log(req.body, 'req.body');
+//     // console.log(req, 'req.body');
+//     db.query('INSERT INTO xinxi (name,time) VALUE(?,?)', [req.body.name, req.body.time]).then(data => {
+//         res.status(200).send({
+//             msg: "成功",
+//             code: 200
+//         })
+//     }).catch(err => {
+//         res.send({
+//             msg: "失败",
+//             err
+//         })
+//     })
+// })
+
+
+// router.post('/loginadd', (req, res) => {
+//     Db.select('INSERT INTO xinxi (name,time) VALUE(?,?)', [req.body.name, req.body.time]).then(data => {
+//         res.status(200).send({
+//             msg: "成功",
+//             code: 200
+//         })
+//     }).catch(err => {
+//         res.send({
+//             msg: "失败",
+//             err
+//         })
+//     })
+// })
+
+
+
+// let textModel = () => {
+//     return async (req, res) => {
+//         let [err, data] = await to(Db.select('INSERT INTO xinxi (name,time,text) VALUE(?,?,?)', [req.query.name, req.query.time, req.query.text]))
+//         err ? ERROR(res, '信息发送失败', err) : SUCCESS(res, data);
+//     }
+// }
+// router.get('/text', textModel());
+
+
+
+// router.get('/data', (req, res) => {
+//     Db.select('SELECT * FROM xinxi').then(data => {
+//         res.status(200).send({ data })
+//     }).catch(err => {
+//         res.send({
+//             msg: "失败",
+//             err: "连接失败"
+//         })
+//     })
+// })
+
+
+
+
+// router.get('/text', async (req, res) => {
+// let [err, data] = await to(Db.select('INSERT INTO xinxi (name,time,text) VALUE(?,?,?)', [req.query.name, req.query.time, req.query.text]))
+// console.log(err, data, '我是err');
+// err ? ERROR(res, '轮播图查询失败', err) : SUCCESS(res, data);
+
+// .then(data => {
+//     res.status(200).send({
+//         msg: "成功",
+//         code: 200
+//     })
+// }).catch(err => {
+//     res.send({
+//         msg: "失败",
+//         err
+//     })
+// })
+// })

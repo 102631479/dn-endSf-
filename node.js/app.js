@@ -18,7 +18,9 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 //处理josn 格式的
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 //指定静态资源
 app.use(express.static(path.join(__dirname, 'public')));
@@ -30,7 +32,7 @@ var logisticsdataRouter = require('./routes/logisticsdata');
 var addUserRouter = require('./routes/addUser');
 // var uploadImgRouter = require('./routes/multer');
 // var loginRouter = require('./routes/login');
-// var numRouter = require('./routes/num');
+var getdataRouter = require('./routes/getdata');
 
 app.use('/', indexRouter);
 // app.use('/', usersRouter);
@@ -38,7 +40,7 @@ app.use('/', logisticsdataRouter);
 // app.use('/', mysqlRouter);
 app.use('/', addUserRouter);
 // app.use('/', loginRouter);
-// app.use('/', numRouter);
+app.use('/', getdataRouter);
 // app.use('/', uploadImgRouter);
 
 
@@ -61,4 +63,3 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
-
