@@ -28,19 +28,20 @@ class Db {
             conn.getConnection(function (err, connection) {
                 if (err) {
                     reject(err)
-                    console.log("建立连接失败");
+                    // console.log("建立连接失败");
                 } else {
-                    console.log("建立连接成功");
+                    // console.log("建立连接成功");
                     console.log(conn._allConnections.length, '2'); //  1
                     connection.query(sql, params, function (err, rows) {
                         if (err) {
-                            console.log("查询失败");
+                            reject(err)
+                            // console.log("查询失败");
                         } else {
                             resolve(rows)
-                            console.log(rows, '1data');
+                            // console.log(rows, '1data');
                         }
                         // connection.destory();
-                        console.log(conn._allConnections.length); // 0
+                        // console.log(conn._allConnections.length); // 0
                     })
                 }
                 connection.release();;
@@ -49,7 +50,11 @@ class Db {
         return p
 
 
+        
 
+        // 建立对象链接  8小时sql没有活动会中断请求
+
+        
         // let [err, data] = await to(this.connect());
         // if (err) throw '错误';
         // let p = new Promise((resolve, reject) => {
@@ -62,7 +67,7 @@ class Db {
 
 
 
-        
+
     }
     close() {
         this.conn.end();
