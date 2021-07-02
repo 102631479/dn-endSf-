@@ -24,13 +24,6 @@ router.get('/getdata', (req, res) => {
 
             res.send(items);
         });
-
-
-
-
-
-
-
 })
 
 module.exports = router;

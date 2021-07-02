@@ -43,7 +43,7 @@ let recyled = () => {
         let [err, data] = await to(Db.select('INSERT INTO recyled (logisticsdata,datatime,name,phone,shopname,logistics,remark,goPrice,usercode) VALUE(?,?,?,?,?,?,?,?,?)',
             [sqldata.logisticsdata, sqldata.datatime, sqldata.name, sqldata.phone, sqldata.shopname, sqldata.logistics, sqldata.remark, sqldata.goPrice, sqldata.usercode]))
         if (err) {
-            console.log("回收失败");
+            // console.log("回收失败");
             ERROR(res, '回收失败', err)
         } else {
             let [error, datase] = await to(Db.select(`DELETE FROM user WHERE id='${req.query.id}' AND usercode="${req.query.usercode}" `))
