@@ -1,5 +1,7 @@
 var mysql = require('mysql'); // node-mysql module
-const { json } = require('body-parser');
+const {
+    json
+} = require('body-parser');
 
 // errno 4058 路径问题
 // 注意这里必须用绝对路径
@@ -21,15 +23,46 @@ class Db {
         });
     }
     async select(sql, params = []) {
-        let [err, data] = await to(this.connect());
-        if (err) throw '错误';
+        let conn = mysql.createPool(obj);
         let p = new Promise((resolve, reject) => {
-            this.conn.query(sql, params, (err, result) => {
-                err ? reject(err) : resolve(result);
-            });
-        });
-        this.close()
-        return p;
+            conn.getConnection(function (err, connection) {
+                if (err) {
+                    reject(err)
+                    console.log("建立连接失败");
+                } else {
+                    console.log("建立连接成功");
+                    console.log(conn._allConnections.length, '2'); //  1
+                    connection.query(sql, params, function (err, rows) {
+                        if (err) {
+                            console.log("查询失败");
+                        } else {
+                            resolve(rows)
+                            console.log(rows, '1data');
+                        }
+                        // connection.destory();
+                        console.log(conn._allConnections.length); // 0
+                    })
+                }
+                connection.release();;
+            })
+        })
+        return p
+
+
+
+        // let [err, data] = await to(this.connect());
+        // if (err) throw '错误';
+        // let p = new Promise((resolve, reject) => {
+        //     this.conn.query(sql, params, (err, result) => {
+        //         err ? reject(err) : resolve(result);
+        //     });
+        // });
+        // this.close()
+        // return p;
+
+
+
+        
     }
     close() {
         this.conn.end();
