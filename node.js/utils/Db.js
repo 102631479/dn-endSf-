@@ -44,7 +44,7 @@ class Db {
                         // console.log(conn._allConnections.length); // 0
                     })
                 }
-                connection.release();;
+                // connection.release();
             })
         })
         return p

@@ -21,6 +21,8 @@ let dataModel = () => {
 router.get('/data', dataModel());
 
 
+
+
 // 添加
 let textModel = () => {
     return async (req, res) => {
@@ -89,6 +91,17 @@ let Retuedata = () => {
 
 
 router.get('/retureData', Retuedata());
+
+
+
+let clouddataModel = () => {
+    return async (req, res) => {
+        console.log(req.query.usercode, '个人账户信息');
+        let [err, data] = await to(Db.select(`SELECT * FROM cloud WHERE usercode="${req.query.usercode}" and phone like "%${req.query.phone}%" ORDER by id desc `))
+        err ? ERROR(res, '数据查询失败2', err) : SUCCESS(res, data);
+    }
+}
+router.get('/clouddata', clouddataModel());
 
 module.exports = router;
 
