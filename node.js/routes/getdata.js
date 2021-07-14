@@ -23,6 +23,7 @@ Referer: https://servicewechat.com/wxded25a5479be2a8c/129/page-frame.html
 
 router.get('/getdata', (req, res) => {
     superagent.post('https://app.dennis.cn/v1/wxmall/advanceFix/afIndex')
+        // superagent.post('https://app.dennis.cn/v1/wxmall/advanceFix/apInfoAndStock')
         .set({
             // "Host": "",
             // "Connection": "keep-alive",
@@ -34,8 +35,8 @@ router.get('/getdata', (req, res) => {
             'User-Agent': " Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_3 like Mac OS X)",
         })
         .send({
-            mobile:"18300692207",
-            apId:"5e40d21229274cd7a11c871b46bdc5f6"
+            mobile: "18300692207",
+            apId: "5e40d21229274cd7a11c871b46bdc5f6"
         })
         .end(function (err, sres) {
             console.log(err, 'err');
