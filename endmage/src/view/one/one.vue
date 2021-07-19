@@ -132,6 +132,16 @@ export default {
         }
     },
     methods: {
+        isHasObj(arr, val) {
+            var flag = false;
+            for (var i = 0; i < arr.length; i++) {
+                if (JSON.stringify(arr[i]).indexOf(JSON.stringify(val)) != -1) {
+                    console.log(JSON.stringify(arr[i]).indexOf(val));
+                    flag = JSON.stringify(arr[i]).indexOf(JSON.stringify(val));
+                }
+            }
+            return flag;
+        },
         getrecyledData(d) {
             getrecyled(d)
                 .then((res) => {
@@ -143,7 +153,12 @@ export default {
                         message: d.name + '加入回收站成功',
                         type: 'success'
                     });
-                    console.log(res);
+                    // let isFlase;
+                    // this.tableData.some((item, index) => {
+                    //     isFlase = index;
+                    //     if (d.id == item.id) return index;
+                    // });
+                    // this.tableData.splice(isFlase, 1);
                 })
                 .catch((err) => {
                     console.log(err);

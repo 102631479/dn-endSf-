@@ -49,7 +49,8 @@ export default {
                 datatime: ''
             },
             centerDialogVisible: false,
-            tableData: []
+            tableData: [],
+            isNext: true
         };
     },
     watch: {
@@ -63,21 +64,27 @@ export default {
     },
     mounted() {},
     methods: {
-        retuerDa(d) {
-            console.log(d, 'sss');
-            RETretureData(d)
+        async retuerDa(d) {
+            await RETretureData(d)
                 .then((res) => {
                     this.getData({
                         usercode: localStorage.getItem('ms_username'),
                         phone: this.phoneCode
                     });
-                    this.$message({
-                        message: d.name + '恢复成功',
-                        type: 'success'
-                    });
-                    console.log(res);
+                    // this.isNext = true;
+                    // this.$message({
+                    //     message: d.name + '恢复成功',
+                    //     type: 'success'
+                    // });
+                    // let isFlase;
+                    // this.tableData.some((item, index) => {
+                    //     isFlase = index;
+                    //     if (d.id == item.id) return index;
+                    // });
+                    // this.tableData.splice(isFlase, 1);
                 })
                 .catch((err) => {
+                    this.isNext = true;
                     console.log(err);
                 });
             // RETretureData(d){

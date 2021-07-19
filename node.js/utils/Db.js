@@ -46,12 +46,10 @@ class Db {
                 }
                 // connection.release();
             })
-            conn.end();
+            // conn.end();
         })
         return p
-
         // 建立对象链接  8小时sql没有活动会中断请求
-
         // let [err, data] = await to(this.connect());
         // if (err) throw '错误';
         // let p = new Promise((resolve, reject) => {
