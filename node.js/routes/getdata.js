@@ -22,21 +22,20 @@ Referer: https://servicewechat.com/wxded25a5479be2a8c/129/page-frame.html
 
 
 router.get('/getdata', (req, res) => {
-    superagent.post('https://app.dennis.cn/v1/wxmall/advanceFix/afIndex')
+    console.log('爬虫开始');
+    superagent.post('https://www.gza-e.com/api/consumer/user/info')
         // superagent.post('https://app.dennis.cn/v1/wxmall/advanceFix/apInfoAndStock')
         .set({
-            // "Host": "",
-            // "Connection": "keep-alive",
-            // "Accept-Encoding": "gzip, deflate, br",
-            'username': 'dns_ee7190d9fcfd',
-            "content-type": "application/x-www-form-urlencoded",
-            "type": '1',
-            "token": "de16dbd357c2709f853e4102a34f77b33350e03900ab03e6c86cd17111ab3ca6",
-            'User-Agent': " Mozilla/5.0 (iPhone; CPU iPhone OS 12_5_3 like Mac OS X)",
+            
+            // 'Content-Length': '372',
+            'content-type': 'application/json'
         })
         .send({
-            mobile: "18300692207",
-            apId: "5e40d21229274cd7a11c871b46bdc5f6"
+            accessToken: 'ODc0ODEwNDU3MjI2MDg0MzUyOjE6YTk5ZmRjNTRiYTQwNGU1YThkMTIwODc0MDU3ZmE1ZWQ=',
+            nonceStr: '40cbba5658fb4b2f96d52f632c1ceeec',
+            Referer: 'https://servicewechat.com/wx88c590140de89f92/94/page-frame.html',
+            sign: 'e50c8bfe1be606768361ef2efdb610c4',
+            timestamp: '1631159791',
         })
         .end(function (err, sres) {
             console.log(err, 'err');
