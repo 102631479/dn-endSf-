@@ -26,7 +26,6 @@ router.get('/getdata', (req, res) => {
     superagent.post('https://www.gza-e.com/api/consumer/user/info')
         // superagent.post('https://app.dennis.cn/v1/wxmall/advanceFix/apInfoAndStock')
         .set({
-            
             // 'Content-Length': '372',
             'content-type': 'application/json'
         })
@@ -55,7 +54,6 @@ router.get('/getdata', (req, res) => {
             //         href: $element.attr('href')
             //     });
             // });
-
         });
 })
 
