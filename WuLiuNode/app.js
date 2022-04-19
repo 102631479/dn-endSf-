@@ -23,26 +23,26 @@ app.use(morgan('dev'));
 app.disable('etag');
 
 
-// const cors = require("cors");
-// app.use(cors())
+const cors = require("cors");
+app.use(cors())
 
 
 // 设置跨域和相应数据格式  
-app.all('*', function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With, mytoken')
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With, Authorization')
-    res.setHeader('Content-Type', 'application/json;charset=utf-8')
-    res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With,sessionToken')
-    res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE')
-    res.header('X-Powered-By', ' 3.2.1')
-    // // res.setHeader('Expires',new Date(Date.now()+10*1000).toGMTString())
-    // res.setHeader('Cache-Control','false')
-    // // res.setHeader('Last-Modified', (new Date()).toUTCString());
-    if (req.method == 'OPTIONS') res.send(200)
-    /*让options请求快速返回*/
-    else next()
-})
+// app.all('*', function (req, res, next) {
+//     res.header('Access-Control-Allow-Origin', '*')
+//     res.header('Access-Control-Allow-Headers', 'X-Requested-With, mytoken')
+//     res.header('Access-Control-Allow-Headers', 'X-Requested-With, Authorization')
+//     res.setHeader('Content-Type', 'application/json;charset=utf-8')
+//     res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With,sessionToken')
+//     res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE')
+//     res.header('X-Powered-By', ' 3.2.1')
+//     // // res.setHeader('Expires',new Date(Date.now()+10*1000).toGMTString())
+//     // res.setHeader('Cache-Control','false')
+//     // // res.setHeader('Last-Modified', (new Date()).toUTCString());
+//     if (req.method == 'OPTIONS') res.send(200)
+//     /*让options请求快速返回*/
+//     else next()
+// })
 
 
 app.get('/', (req, res) => {
@@ -57,23 +57,23 @@ app.get('/', (req, res) => {
 
 
 app.use('/api', async (req, res, next) => {
-    next()
-    return
+    // next()
+    // return
     if (req.url == '/login' || req.url == '/register' || req.url == '/redisTest') {
         // // console.log(req.body,'1111');
         next()
         return
     }
-    if (req.url == '/cic_info/downtable') {
-        // console.log('下载接口');
-        next()
-        return
-    }
-    if (req.url == '/biz_call/getData') {
-        // console.log('下载接口');
-        next()
-        return
-    }
+    // if (req.url == '/cic_info/downtable') {
+    //     // console.log('下载接口');
+    //     next()
+    //     return
+    // }
+    // if (req.url == '/biz_call/getData') {
+    //     // console.log('下载接口');
+    //     next()
+    //     return
+    // }
     // 接收客户端传递过来的 token
     const token = String(req.headers.authorization)
     // 解析 token 如果解析失败 返回的是 null
@@ -91,6 +91,8 @@ app.use('/api', async (req, res, next) => {
         })
         return
     } else {
+        next()
+        return
         // token时间戳
         const username = jwt.decode(token, 'DingNing').username
         // // 当前时间戳

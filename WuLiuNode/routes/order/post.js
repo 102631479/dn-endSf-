@@ -5,13 +5,17 @@ const jwt = require('jsonwebtoken')
 module.exports = async (req, res) => {
     let obj = jwt.decode(req.headers.authorization, 'DingNing')
     let username = obj.username
+
     let {
         phone,
         shopname,
         remark,
         logistics,
-        goPrice
+        goPrice,
+        orderType,
+        agent,
     } = req.body
+    let status = 1
     // console.log(req.body);
     // return
 
@@ -23,7 +27,10 @@ module.exports = async (req, res) => {
                 shopname,
                 remark,
                 logistics,
-                goPrice
+                goPrice,
+                orderType,
+                agent,
+
             }
         })
         if (model) {
@@ -36,15 +43,16 @@ module.exports = async (req, res) => {
             })
             return
         }
-
-
         await order.create({
             username,
             phone,
             shopname,
             remark,
             logistics,
-            goPrice
+            goPrice,
+            status,
+            orderType,
+            agent
         }).catch(err => {
             res.status(201).send({
                 err,

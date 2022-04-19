@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
         "Content-Type": "application/json;charset=UTF-8",
         "Authorization": "APPCODE 56ab62bcacb04d5e8a9b575f056831f1",
     }
-    var url = `http://jisukdcx.market.alicloudapi.com/express/query?mobile=${req.query.phone}&number=${req.query.number}&type=auto`;
+    var url = `http://jisukdcx.market.alicloudapi.com/express/query?mobile=${req.query.phone}&number=${req.query.logistics}&type=auto`;
     var options = {
         url: url,
         method: 'GET',

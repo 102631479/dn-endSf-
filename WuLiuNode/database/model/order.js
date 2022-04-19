@@ -6,7 +6,12 @@ const order = sequelize.define('order', {
     username: {
         // 定义类型 字符串
         type: Sequelize.STRING,
-  
+        allowNull: true,
+
+    },
+    agent: {
+        // 定义类型 字符串
+        type: Sequelize.STRING,
     },
     phone: {
         type: Sequelize.STRING,
@@ -32,6 +37,9 @@ const order = sequelize.define('order', {
     },
     orderType: {
         type: Sequelize.INTEGER,
+    },
+    status: {
+        type: Sequelize.STRING,
     },
 })
 
