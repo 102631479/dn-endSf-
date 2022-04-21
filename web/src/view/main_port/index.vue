@@ -39,7 +39,7 @@
         :visible.sync="dialogVisible"
         :close-on-click-modal="false"
         :modal-append-to-body="false"
-        width="30%"
+        width="50%"
         center
       >
         <div class="block">
@@ -117,7 +117,6 @@ export default {
               type: "success",
             });
             this.init();
-
           })
           .catch((err) => {
             console.log(err);
@@ -125,6 +124,7 @@ export default {
           });
         return;
       } else {
+        this.$store.commit("SetAgent", row.agent);
         addData("/order/addData", row)
           .then((res) => {
             this.$message({
@@ -215,7 +215,7 @@ export default {
         {
           type: "operate",
           name: "操作",
-          widthSize: "300",
+          widthSize: "200",
           props: "operate",
           operate: [
             {
@@ -238,6 +238,21 @@ export default {
                   logistics: row.logistics,
                   id: row.id,
                 };
+
+                if (row.logisticsData) {
+                  this.logisticsDatatext = JSON.parse(row.logisticsData);
+                  this.dialogVisible = true;
+                } else {
+                  let data = {
+                    logisticsDatatext: {
+                      result: {
+                        logo: "",
+                      },
+                    },
+                  };
+                  this.logisticsDatatext = data;
+                }
+                return;
                 getData("/order/getDelivery", data)
                   .then((res) => {
                     console.log(res);
@@ -245,20 +260,7 @@ export default {
                     this.dialogVisible = true;
                     this.init();
                   })
-                  .catch((err) => {
-                    if (row.logisticsData) {
-                      this.logisticsDatatext = JSON.parse(row.logisticsData);
-                    } else {
-                      let data = {
-                        logisticsDatatext: {
-                          result: {
-                            logo: "",
-                          },
-                        },
-                      };
-                      this.logisticsDatatext = data;
-                    }
-                  });
+                  .catch((err) => {});
               },
             },
             {
@@ -315,7 +317,7 @@ export default {
                 };
                 getData("/order/putDelete", data)
                   .then((res) => {
-                          this.init();
+                    this.init();
                   })
                   .catch((err) => {});
               },

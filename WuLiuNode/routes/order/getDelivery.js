@@ -59,7 +59,12 @@ module.exports = async (req, res) => {
             })
         })
     } catch (d) {
-        console.log(d, '失败原因');
+        res.status(201).send({
+            meta: {
+                msg: "失败",
+                status: 400
+            }
+        })
     }
 
 

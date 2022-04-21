@@ -12,8 +12,9 @@ var morgan = require('morgan');
 
 // 处理josn格式数据
 app.use(express.json());
-
-
+const {
+    TonkerControl
+} = require('./database/redis')
 
 // const {
 //     tokenReturn
@@ -79,13 +80,25 @@ app.use('/api', async (req, res, next) => {
     // 解析 token 如果解析失败 返回的是 null
     const usernameData = jwt.decode(token, 'DingNing')
     // 判断客户端是否传递了 token
+    let nameToken = await TonkerControl.synGet(usernameData.username)
+    if (nameToken == null || nameToken != req.headers.authorization) {
+        res.status(201).send({
+            data: null,
+            meta: {
+                msg: "登录过期",
+                status: 4004
+            }
+        })
+        return
+    }
+
     if (token == 'undefined' || usernameData == null) {
         // next()
         // return
         res.status(201).send({
             data: null,
             meta: {
-                msg: "token无效",
+                msg: "登录过期",
                 status: 4004
             }
         })
@@ -130,7 +143,7 @@ app.use('/api', async (req, res, next) => {
             return
 
 
-            
+
             if (d.token == token) {
                 next()
             } else {
@@ -154,7 +167,7 @@ app.use(bodyParser.urlencoded({
 // 为main 匹配 地址 /api
 app.use('/api', main)
 // 监听8888 端口
-app.listen(8888, (res) => {
+app.listen(3033, (res) => {
     // // console.log(res,'监听返回');
     // // console.log('youren')
 })

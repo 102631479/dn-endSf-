@@ -23,7 +23,8 @@ a {
 
 .content-box {
     position: absolute;
-    left: 230px;
+    /* left: 230px; */
+    left: 0px;
     right: 0;
     top: 70px;
     bottom: 0;

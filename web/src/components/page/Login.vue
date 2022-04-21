@@ -117,6 +117,7 @@ export default {
           //  formData.append('code',this.formdata.code)
           login(this.formdata)
             .then((res) => {
+              
               this.$store.commit("GetToken", res.data.token);
               localStorage.setItem("ms_username", res.data.username);
               this.$router.push("/");

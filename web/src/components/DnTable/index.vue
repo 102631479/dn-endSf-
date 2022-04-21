@@ -85,7 +85,7 @@
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
       :modal-append-to-body="false"
-      width="30%"
+      width="50%"
     >
       <form-create
         v-if="dialogVisible"
@@ -167,7 +167,7 @@ export default {
       titleText: "",
       loading: false,
       PageSize: {
-        pageSize: 10,
+        pageSize: 20,
         pageIndex: 1,
       },
       total: 0,
@@ -297,9 +297,9 @@ export default {
           console.log(err, "失败");
         })
         .finally(() => {
-          setTimeout(() => {
+          // setTimeout(() => {
             this.loading = false;
-          }, 200);
+          // }, 200);
         });
     },
 
@@ -317,7 +317,7 @@ export default {
 
 <style scoped>
 .btnoperate {
-  margin-left: 15px;
+  margin-left: 10px;
 }
 >>> .el-upload--text {
   border: none;

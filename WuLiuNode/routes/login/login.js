@@ -7,6 +7,9 @@ const {
 const jwt = require('jsonwebtoken')
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const {
+    TonkerControl
+} = require('../../database/redis')
 module.exports = async (req, res) => {
     // 接收客户端传递过来的账号和密码
     const {
@@ -22,7 +25,7 @@ module.exports = async (req, res) => {
             ['username']: username
         }
     })
-  
+
     // 判断
     if (!findUser) {
         res.status(201).send({
@@ -54,6 +57,7 @@ module.exports = async (req, res) => {
     }, 'DingNing')
 
     try {
+        await TonkerControl.synSet(username, token);
         await tokenReturn.update({
             token: token
         }, {
@@ -61,6 +65,7 @@ module.exports = async (req, res) => {
                 username: username
             }
         }).then((d) => {
+
             res.status(200).send({
                 data: {
                     username: username,

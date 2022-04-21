@@ -13,13 +13,13 @@ let makerForm = [
     // }),
     maker.input('手机号:', 'phone', '', ).col({
         span: 6,
-        labelWidth: '150px',
+        labelWidth: '80px',
     }).props({
         placeholder: "请输入手机号",
     }),
     maker.input('代理人姓名:', 'agent', '', ).col({
         span: 6,
-        labelWidth: '150px',
+        labelWidth: '100px',
     }).props({
         placeholder: "请输入姓名",
     }),
@@ -38,7 +38,7 @@ let makerForm = [
         label: '其他'
     }, ]).col({
         span: 6,
-        labelWidth: '150px',
+        labelWidth: '80px',
     }),
     // maker.dateRange('录入日期:', 'dataTime', [], ).props({
     //     type: "datetimerange",

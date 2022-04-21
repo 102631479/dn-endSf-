@@ -9,11 +9,14 @@ export default new Vuex.Store({
         idAdmin: '',
         updataUrl: 'http://183.134.74.133:8082/api/resource/upload',
         token: "",
-        name: ''
+        agent: ''
     },
     mutations: {
         GetToken(state, payload) {
             state.token = payload
+        },
+        SetAgent(state, payload) {
+            state.agent = payload
         },
         GetidAdmin(state, payload) {
             state.idAdmin = payload

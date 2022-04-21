@@ -22,6 +22,7 @@ axios.interceptors.request.use(
 //请求返回时的拦截器。
 axios.interceptors.response.use(
     response => {
+        console.log(response.data.meta.status);
         if (response.data.code === 4003) {
             Toast({
                 mes: '您没有权限操作！',
@@ -33,7 +34,7 @@ axios.interceptors.response.use(
 
             return false;
         }
-        if (response.data.code === -1) {
+        if (response.data.code === 4004) {
             localStorage.removeItem('token');
             router.push({
                 path: '/login',

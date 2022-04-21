@@ -7,27 +7,49 @@ module.exports = async (req, res) => {
     let username = obj.username
 
     let {
+        agent,
         id,
         phone,
         shopname,
         remark,
         logistics,
         goPrice,
-        status,
+        orderType
     } = req.body
 
     // console.log(req.body);
     // return
 
     try {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         let model = await order.findOne({
             where: {
+                agent,
                 username,
                 phone,
                 shopname,
                 remark,
                 logistics,
-                goPrice
+                goPrice,
+                orderType
             }
         })
         if (model) {
@@ -41,12 +63,14 @@ module.exports = async (req, res) => {
             return
         }
         await order.update({
+            agent,
             phone,
             shopname,
             remark,
             logistics,
             goPrice,
-            status,
+            orderType
+     
         }, {
             where: {
                 // ['username']: username,
@@ -72,7 +96,12 @@ module.exports = async (req, res) => {
         })
 
     } catch (d) {
-        console.log(d, '失败原因');
+        res.status(201).send({
+            meta: {
+                msg: "失败",
+                status: 400
+            }
+        });
     }
 
 

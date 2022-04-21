@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar">
+  <div class="sidebar" v-if="false">
     <el-menu
       class="sidebar-el-menu"
       :default-active="onRoutes"
