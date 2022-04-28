@@ -171,6 +171,9 @@ export default {
         {
           props: "agent",
           name: "代理人",
+          Show: () => {
+            return  false;
+          },
         },
         {
           props: "phone",
@@ -370,12 +373,12 @@ export default {
   /* display: flex; */
 }
 .fd {
-  width: 300px;
+  min-width: 1400px;
   display: flex;
   justify-content: flex-end;
   margin: 10px;
-  margin-top: -40px;
-  position: relative;
+  /* margin-top: -40px; */
+  /* position: relative; */
   /* z-index: 9999999999; */
 }
 .formStyle {

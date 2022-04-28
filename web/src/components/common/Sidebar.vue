@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar" v-if="false">
+  <div class="sidebar" >
     <el-menu
       class="sidebar-el-menu"
       :default-active="onRoutes"
@@ -108,7 +108,7 @@ export default {
 .sidebar {
   display: block;
   position: absolute;
-  left: 0;
+  /* left: 160px; */
   top: 70px;
   bottom: 0;
   overflow-y: scroll;
