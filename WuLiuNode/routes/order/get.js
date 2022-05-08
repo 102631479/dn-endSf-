@@ -7,10 +7,8 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 module.exports = async (req, res) => {
     try {
-
         let obj = jwt.decode(req.headers.authorization, 'DingNing')
         let username = obj.username
-
         console.log(username, 'username');
         if (username == 'admin') {
 
@@ -51,7 +49,6 @@ module.exports = async (req, res) => {
                 limit: Number(req.query.pageSize)
             })
             res.status(200).send({
-
                 data: {
                     total: OrderRetuen.count,
                     list: data

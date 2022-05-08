@@ -15,9 +15,14 @@ main.get('/order/putDelete', require('./order/putDelete'))
 // 物流
 main.get('/order/getDelivery', require('./order/getDelivery'))
 // 创建一个路由测试一下
-main.get('/index', (req, res) => {
-    res.send('访问成功！')
-})
+main.get('/index',require('./test/index') )
+
+main.get('/daZhang/getData', require('./daZhang/get'))
+main.get('/daZhang/add', require('./daZhang/add'))
+
+
+
+
 
 // 导出
 module.exports = main

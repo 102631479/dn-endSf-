@@ -2,7 +2,7 @@
   <div class="login-wrap">
     <!-- <div class="ms-login" style="width: 400px"> -->
     <div class="ms-login" data-aos="zoom-in">
-      <div class="ms-title">物流监控</div>
+      <div class="ms-title">数据统计平台</div>
       <el-form
         :model="formdata"
         :rules="rules"
@@ -23,7 +23,7 @@
             v-model="formdata.password"
             @keyup.enter.native="submitForm()"
           >
-            <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+            <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
           </el-input>
         </el-form-item>
         <div class="login-btn">
@@ -108,26 +108,19 @@ export default {
     submitForm() {
       this.$refs.login.validate((valid) => {
         if (valid) {
-          // this.$router.push("/");
-          // localStorage.setItem("ms_username", this.formdata.username);
-          // return;
-          //  let formData=new FormData
-          //  formData.append('username',this.formdata.username)
-          //  formData.append('password',this.formdata.password)
-          //  formData.append('code',this.formdata.code)
           login(this.formdata)
             .then((res) => {
-              
               this.$store.commit("GetToken", res.data.token);
+              this.$store.commit("GetName", this.formdata.username);
               localStorage.setItem("ms_username", res.data.username);
-              this.$router.push("/");
+              this.$router.push("/daZhang_Store");
               this.$message({
                 message: "登录成功！",
                 type: "success",
               });
             })
             .catch((err) => {
-              this.$message.error(err.message);
+              this.$message.error(err.meta.msg);
             });
         } else {
           this.$message.error("请输入账号和密码");

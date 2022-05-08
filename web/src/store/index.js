@@ -9,7 +9,8 @@ export default new Vuex.Store({
         idAdmin: '',
         updataUrl: 'http://183.134.74.133:8082/api/resource/upload',
         token: "",
-        agent: ''
+        agent: '',
+        name:"",
     },
     mutations: {
         GetToken(state, payload) {

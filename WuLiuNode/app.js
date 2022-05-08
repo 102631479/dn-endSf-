@@ -58,16 +58,18 @@ app.get('/', (req, res) => {
 
 
 app.use('/api', async (req, res, next) => {
-    
     // next()
     // return
-
-    if (req.url == '/login' || req.url == '/register' || req.url == '/redisTest') {
+    // if (req.url == '/login' || req.url == '/register' || req.url == '/redisTest') {
+    //     // // console.log(req.body,'1111');
+    //     next()
+    //     return
+    // }
+    if (req.url == '/login') {
         // // console.log(req.body,'1111');
         next()
         return
     }
-
     // if (req.url == '/cic_info/downtable') {
     //     // console.log('下载接口');
     //     next()
@@ -86,6 +88,17 @@ app.use('/api', async (req, res, next) => {
     const usernameData = jwt.decode(token, 'DingNing')
     // 判断客户端是否传递了 token
     let nameToken = await TonkerControl.synGet(usernameData.username)
+
+    // if (req.headers.authorization != TonkerControl.synGet(usernameData.username)) {
+    //     res.status(201).send({
+    //         data: null,
+    //         meta: {
+    //             msg: "登录过期",
+    //             status: 4001
+    //         }
+    //     })
+    //     return
+    // }
     if (nameToken == null || nameToken != req.headers.authorization) {
         res.status(201).send({
             data: null,
@@ -146,9 +159,6 @@ app.use('/api', async (req, res, next) => {
             // // console.log(token,'传过来的');
             next()
             return
-
-
-
             if (d.token == token) {
                 next()
             } else {

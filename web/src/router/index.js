@@ -7,7 +7,7 @@ export default new Router({
     mode: 'history',
     routes: [{
             path: '/',
-            redirect: '/main_port'
+            redirect: '/daZhang_Store'
         },
         {
             path: '/',
@@ -38,10 +38,17 @@ export default new Router({
                 },
               
                 {
-                    path: '/main_port',
-                    component: () => import( /* webpackChunkName: "table" */ '../view/main_port/index.vue'),
+                    path: '/logistics_management',
+                    component: () => import( /* webpackChunkName: "table" */ '../view/logistics_management/index.vue'),
                     meta: {
                         title: '主端口'
+                    }
+                },
+                {
+                    path: '/daZhang_Store',
+                    component: () => import( /* webpackChunkName: "table" */ '../view/daZhang_Store/index.vue'),
+                    meta: {
+                        title: '大张订单'
                     }
                 },
             

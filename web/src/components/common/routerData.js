@@ -17,8 +17,15 @@ let DataRouter = [
     {
         powerShow: true,
         icon: 'el-icon-user-solid',
-        index: 'main_port',
+        index: 'logistics_management',
         title: '物流管理',
+     
+    },
+    {
+        powerShow: true,
+        icon: 'el-icon-user-solid',
+        index: 'daZhang_Store',
+        title: '大张订单',
      
     },
 

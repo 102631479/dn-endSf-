@@ -6,6 +6,8 @@
       border
       style="width: 100%"
       class="table-ridues"
+      show-overflow-tooltip
+      @cell-dblclick="copyItem"
     >
       <el-table-column label="序列" align="center" type="index" width="50">
       </el-table-column>
@@ -26,6 +28,7 @@
               v-if="item.type == 'text'"
               v-html="item.formatter(scope.row, item, scope.$index)"
               @click="item.click && item.click(scope.row, scope.$index)"
+              :class="scope.row.status == '0' ? 'pickedUpBtn' : 'pickBtn'"
             ></span>
 
             <div v-if="item.type == 'button'">
@@ -50,7 +53,7 @@
                   :key="operateData.id"
                 >
                   <el-button
-                    v-if="isShowOperate(operateData,scope.row)"
+                    v-if="isShowOperate(operateData, scope.row)"
                     type="text"
                     size="small"
                     @click="operate(operateData, scope.row, scope.$index)"
@@ -104,13 +107,18 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[10, 20, 30, 40]"
+        :page-sizes="[20, 30, 40]"
         :page-size="1"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       >
       </el-pagination>
     </div>
+    <!-- 单击复制需要改输入框，隐藏了 -->
+    <textarea
+      id="input"
+      style="position: absolute; top: 0; left: 0; opacity: 0; z-index: -10"
+    ></textarea>
   </div>
 </template>
 
@@ -181,7 +189,7 @@ export default {
     });
   },
   methods: {
-    isShowOperate(d,b) {
+    isShowOperate(d, b) {
       return d.Show(b);
     },
     isShow(d) {
@@ -298,7 +306,7 @@ export default {
         })
         .finally(() => {
           // setTimeout(() => {
-            this.loading = false;
+          this.loading = false;
           // }, 200);
         });
     },
@@ -311,6 +319,19 @@ export default {
       this.PageSize.pageIndex = val;
       this.$emit("handleCurrentChange");
     },
+    //双击直接复制当前单元格内内容
+    copyItem(row, column, cell, event) {
+      let save = function (e) {
+        e.clipboardData.setData("text/plain", event.target.innerText);
+        e.preventDefault(); //阻止默认行为
+      };
+      document.addEventListener("copy", save); //添加一个copy事件
+      document.execCommand("copy"); //执行copy方法
+      this.$message({
+        message: "复制成功",
+        type: "success",
+      }); //提示
+    },
   },
 };
 </script>
@@ -319,20 +340,20 @@ export default {
 .btnoperate {
   margin-left: 10px;
 }
->>> .el-upload--text {
+/* >>> .el-upload--text {
   border: none;
   width: 86px;
   height: 25px;
   margin-top: 5px;
-}
->>> ._fc-upload .fc-upload-btn,
+} */
+/* >>> ._fc-upload .fc-upload-btn,
 ._fc-upload .fc-files {
   width: 127px;
   line-height: 33px;
   height: 100px;
   margin-top: -5px;
   margin-left: -20px;
-}
+} */
 .table {
   height: 100vh;
   /* min-width: 1400px; */
@@ -345,5 +366,11 @@ export default {
   width: 500px;
   margin: 30px auto;
   padding: 30px;
+}
+.pickedUpBtn {
+  color: red;
+}
+.pickBtn {
+  color: rgb(30, 223, 30);
 }
 </style>

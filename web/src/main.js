@@ -4,11 +4,7 @@ import router from './router';
 import ElementUI from 'element-ui';
 import VueI18n from 'vue-i18n';
 import store from './store'
-
-
-
-
-
+import 'element-ui/lib/theme-chalk/index.css';
 import formCreate from '@form-create/element-ui'
 Vue.use(formCreate)
 
@@ -23,9 +19,10 @@ AOS.init();
 import {
     messages
 } from './components/common/i18n';
-import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
+// import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 // import './assets/css/theme-green/index.css'; // 浅绿色主题
 import './assets/css/icon.css';
+import './assets/elementui/index.css';
 import 'babel-polyfill';
 import {
     post,

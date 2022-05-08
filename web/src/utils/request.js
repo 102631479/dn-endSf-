@@ -24,6 +24,7 @@ const service = axios.create({
     // baseURL: 'http://183.134.74.133:8082/api',
     // baseURL: 'http://172.16.16.113:3033/api',
     baseURL: 'http://101.132.72.248:3033/api',
+    // baseURL: 'http://192.168.31.53:3033/api',
     timeout: 10000,
 });
 service.interceptors.request.use(
