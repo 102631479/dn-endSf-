@@ -1,7 +1,9 @@
 const {
     order
 } = require('../../database/model/order')
-
+const {
+    tryErrorFun
+} = require('../../src/until/returnFun')
 const jwt = require('jsonwebtoken')
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
@@ -125,12 +127,8 @@ module.exports = async (req, res) => {
         // if()
 
     } catch (d) {
-        res.status(201).send({
-            meta: {
-                msg: "失败",
-                status: 400
-            }
-        })
+        tryErrorFun(res,d)
+
     }
 
 

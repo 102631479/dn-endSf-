@@ -4,6 +4,9 @@ const {
 const {
     tokenReturn
 } = require('../../database/model/login/token')
+const {
+    tryErrorFun
+} = require('../../src/until/returnFun')
 const jwt = require('jsonwebtoken')
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
@@ -80,14 +83,7 @@ module.exports = async (req, res) => {
         })
 
     } catch (d) {
-        console.log(d);
-        res.status(201).send({
-            result: d,
-            meta: {
-                msg: "服务器错误",
-                status: 201
-            }
-        })
+        tryErrorFun(res,d)
     }
 
 

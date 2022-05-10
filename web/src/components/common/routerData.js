@@ -21,6 +21,7 @@ let DataRouter = [
         title: '物流管理',
      
     },
+   
     {
         powerShow: true,
         icon: 'el-icon-user-solid',
@@ -28,6 +29,33 @@ let DataRouter = [
         title: '大张订单',
      
     },
+    {
+        powerShow: true,
+        icon: 'el-icon-user-solid',
+        index: 'daZhang_Xinxi',
+        title: '信息统计',
+    },
+    {
+        powerShow: true,
+        icon: 'el-icon-user-solid',
+        index: 'daZhang_IP',
+        title: 'IP配置',
+    },
+    {
+        powerShow: true,
+        icon: 'el-icon-user-solid',
+        index: 'daZhang_StoreXinxi',
+        title: '门店信息',
+     
+    },
+    {
+        powerShow: true,
+        icon: 'el-icon-user-solid',
+        index: 'daZhang_reserve',
+        title: '预约门店',
+     
+    },
+
 
   
 

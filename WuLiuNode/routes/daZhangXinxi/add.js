@@ -1,39 +1,32 @@
 const {
-    order
-} = require('../../database/model/order')
-const jwt = require('jsonwebtoken')
+    daZhangXinxi
+} = require('../../database/model/daZhangXinxi')
 const {
     tryErrorFun
 } = require('../../src/until/returnFun')
+const jwt = require('jsonwebtoken')
 module.exports = async (req, res) => {
     let obj = jwt.decode(req.headers.authorization, 'DingNing')
     let username = obj.username
 
     let {
-        phone,
-        shopname,
+        mobile,
+        memberName,
+        wxid,
+        tokenData,
+        openidData,
         remark,
-        logistics,
-        goPrice,
-        orderType,
-        agent,
     } = req.body
-    let status = 1
-    // console.log(req.body);
-    // return
-
     try {
-        let model = await order.findOne({
+        let model = await daZhangXinxi.findOne({
             where: {
                 username,
-                phone,
-                shopname,
+                mobile,
+                memberName,
+                wxid,
+                tokenData,
+                openidData,
                 remark,
-                logistics,
-                goPrice,
-                orderType,
-                agent,
-
             }
         })
         if (model) {
@@ -46,16 +39,14 @@ module.exports = async (req, res) => {
             })
             return
         }
-        await order.create({
+        await daZhangXinxi.create({
             username,
-            phone,
-            shopname,
+            mobile,
+            memberName,
+            wxid,
+            tokenData,
+            openidData,
             remark,
-            logistics,
-            goPrice,
-            status,
-            orderType,
-            agent
         }).catch(err => {
             res.status(201).send({
                 err,
@@ -77,7 +68,6 @@ module.exports = async (req, res) => {
 
     } catch (d) {
         tryErrorFun(res,d)
-
     }
 
 

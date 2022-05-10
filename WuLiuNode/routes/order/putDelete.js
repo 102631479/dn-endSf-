@@ -2,6 +2,9 @@ const {
     order
 } = require('../../database/model/order')
 const jwt = require('jsonwebtoken')
+const {
+    tryErrorFun
+} = require('../../src/until/returnFun')
 module.exports = async (req, res) => {
     try {
         await order.update({
@@ -30,12 +33,8 @@ module.exports = async (req, res) => {
         })
 
     } catch (d) {
-        res.status(201).send({
-            meta: {
-                msg: "失败",
-                status: 400
-            }
-        })
+        tryErrorFun(res,d)
+
     }
 
 

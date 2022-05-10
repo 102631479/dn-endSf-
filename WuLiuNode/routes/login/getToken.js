@@ -2,6 +2,9 @@ const {
     tokenReturn
 } = require('../../database/model/login/token')
 const jwt = require('jsonwebtoken')
+const {
+    tryErrorFun
+} = require('../../src/until/returnFun')
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 module.exports = async (req, res) => {

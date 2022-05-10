@@ -51,6 +51,13 @@ export default new Router({
                         title: '大张订单'
                     }
                 },
+                {
+                    path: '/daZhang_Xinxi',
+                    component: () => import( /* webpackChunkName: "table" */ '../view/daZhang_Xinxi/index.vue'),
+                    meta: {
+                        title: '信息统计'
+                    }
+                },
             
                 {
                     path: '/404',

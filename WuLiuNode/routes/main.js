@@ -16,9 +16,15 @@ main.get('/order/putDelete', require('./order/putDelete'))
 main.get('/order/getDelivery', require('./order/getDelivery'))
 // 创建一个路由测试一下
 main.get('/index',require('./test/index') )
-
+// 大张订单
 main.get('/daZhang/getData', require('./daZhang/get'))
 main.get('/daZhang/add', require('./daZhang/add'))
+// 大张信息
+main.get('/daZhangXinxi/getData', require('./daZhangXinxi/get'))
+main.post('/daZhangXinxi/addData', require('./daZhangXinxi/add'))
+main.put('/daZhangXinxi/putData', require('./daZhangXinxi/put'))
+main.delete('/daZhangXinxi/deleteData', require('./daZhangXinxi/dele'))
+
 
 
 

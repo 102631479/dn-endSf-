@@ -3,7 +3,9 @@ const {
     order
 } = require('../../database/model/order')
 const jwt = require('jsonwebtoken')
-
+const {
+    tryErrorFun
+} = require('../../src/until/returnFun')
 module.exports = async (req, res) => {
     let obj = jwt.decode(req.headers.authorization, 'DingNing')
     let username = obj.username
@@ -59,12 +61,8 @@ module.exports = async (req, res) => {
             })
         })
     } catch (d) {
-        res.status(201).send({
-            meta: {
-                msg: "失败",
-                status: 400
-            }
-        })
+        tryErrorFun(res,d)
+
     }
 
 

@@ -21,4 +21,9 @@ export const getEditData = (urlData, data) => {
     });
 };
 
-
+export const deleteData = (urlData) => {
+    return request({
+        url: urlData,
+        method: 'delete',
+    });
+};

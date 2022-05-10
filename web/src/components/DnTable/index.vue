@@ -125,7 +125,7 @@
 <script>
 import Bus from "../common/bus";
 import option from "./opt";
-import { getData, getEditData } from "./api";
+import { getData, getEditData, deleteData } from "./api";
 export default {
   /**
    * 表格属性 *
@@ -244,12 +244,22 @@ export default {
       if (a.type == "delete") {
         this.$confirm("确认删除？")
           .then((_) => {
+            let urlD = a.url + "?id=" + b.id;
             console.log(a.url + "?id=" + b.id, "删除接口对接");
-            // done();
-            this.$message({
-              message: "删除成功",
-              type: "success",
-            });
+            deleteData(urlD)
+              .then((res) => {
+                this.$emit("Deleinit");
+                this.$message({
+                  message: "删除成功",
+                  type: "success",
+                });
+              })
+              .catch((err) => {
+                this.$message({
+                  message: "删除失败",
+                  type: "error",
+                });
+              });
           })
           .catch((_) => {
             this.$message({
@@ -289,7 +299,7 @@ export default {
       this.$nextTick(() => {
         this.createDnForm.resetFields();
       });
-      console.log(this.createDnForm, "sssss");
+      console.log(this.createDnForm, "添加数据");
     },
     // 获取表格数据
     async init(d) {

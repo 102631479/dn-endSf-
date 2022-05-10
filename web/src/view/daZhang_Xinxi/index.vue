@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>大张订单</h3>
+    <h3>信息统计</h3>
     <div class="formStyle">
       <form-create
         :option="option"
@@ -10,7 +10,7 @@
       ></form-create>
       <div class="fd">
         <div>
-          添加号码：
+          <!-- 添加号码：
           <el-input
             class="inputadd"
             v-model="memberMobile"
@@ -18,9 +18,12 @@
           ></el-input>
           <el-button type="primary" style="margin-left: 20px" @click="add()"
             >添加</el-button
-          >
+          > -->
         </div>
         <div>
+          <el-button type="primary" style="margin-left: 20px" @click="add()"
+            >添加</el-button
+          >
           <el-button type="primary" @click="init()">搜索</el-button>
           <el-button @click="resetFor()">重置</el-button>
         </div>
@@ -32,7 +35,9 @@
       ref="DnTable"
       EditUrl="/access-code/info"
       :columns="OptionsData"
-      DataUrl="/daZhang/getData"
+      DataUrl="/daZhangXinxi/getData"
+      :formcreatJS="edit"
+      @Deleinit="init"
       @createDnForm="createDnForm"
       @handleCurrentChange="init"
     ></DnTable>
@@ -85,10 +90,11 @@
 </template>
 
 <script>
-import { addData, putData } from "../../api/Table";
+import { addData, getData, putData } from "../../api/Table";
 import { daZhangAdd } from "../../api/daZhang";
 import option from "../../components/DnTable/opt";
 import search from "./search";
+import edit from "./edit";
 import DnTable from "../../components/DnTable/index.vue";
 export default {
   components: {
@@ -101,21 +107,7 @@ export default {
   },
   methods: {
     add() {
-      if (this.memberMobile == "") return;
-      daZhangAdd({ memberMobile: this.memberMobile })
-        .then((res) => {
-          // console.log(res, "res添加手机号");
-          this.init();
-          this.$message({
-            message: res.meta.msg,
-            type: "success",
-          });
-        })
-        .catch((err) => {
-          // console.log(err.meta.msg,'sss');
-          this.$message.error(err.meta.msg);
-        });
-      console.log("添加新信息");
+      this.$refs.DnTable.addTable();
     },
     getLogisticsDatas(d, buler) {
       if (!d.logistics) {
@@ -136,7 +128,7 @@ export default {
     },
     createDnForm(row) {
       if (row.id) {
-        putData("/order/addData", row)
+        putData("/daZhangXinxi/putData", row)
           .then((res) => {
             this.$refs.DnTable.closeForm();
             this.$message({
@@ -151,13 +143,16 @@ export default {
           });
         return;
       } else {
-        this.$store.commit("SetAgent", row.agent);
-        addData("/order/addData", row)
+        // console.log(row);
+        // return
+        addData("/daZhangXinxi/addData", row)
           .then((res) => {
             this.$message({
               message: "操作成功",
               type: "success",
             });
+            this.$refs.DnTable.createDnForm.resetFields();
+
             this.init();
           })
           .catch((err) => {
@@ -193,7 +188,7 @@ export default {
       formData: {},
       option,
       search,
-      // edit: edit,
+      edit: edit,
       titleText: "",
       OptionsData: [
         {
@@ -203,7 +198,6 @@ export default {
             if (this.$store.state.name == "admin") {
               return true;
             }
-
             return false;
           },
         },
@@ -212,119 +206,58 @@ export default {
           name: "名字",
         },
         {
-          props: "memberMobile",
-          name: "手机号",
-        },
-
-        {
-          props: "memberIdCardNo",
-          name: "身份证",
-          widthSize: "150",
+          props: "wxid",
+          name: "微信号",
         },
         {
           type: "text",
-          props: "status",
-          name: "状态",
+          props: "tokenData",
+          name: "token",
           formatter: (row, column, index) => {
-            return row.status == 0 ? "未提货" : "已提货";
+            return row.tokenData;
           },
         },
-        {
-          props: "billNumber",
-          name: "付款单号",
-          widthSize: "180",
-        },
-        {
-          props: "storeName",
-          name: "门店名称",
-          widthSize: "150",
-        },
-        {
-          props: "createDate",
-          name: "下单时间",
-          widthSize: "150",
-        },
-        {
-          props: "totalAmount",
-          name: "下单价格",
-        },
-
         // {
-        //   props: "updatedAt",
-        //   name: "录入时间",
+        //   props: "storeName",
+        //   name: "门店名字",
+        //   widthSize: "150",
         // },
+        {
+          props: "openidData",
+          name: "openId",
+          widthSize: "240",
+        },
+        {
+          props: "mobile",
+          name: "手机号码",
+        },
+        {
+          props: "updatedAt",
+          name: "更新时间",
+          widthSize: "200",
+        },
         {
           type: "operate",
           name: "操作",
           widthSize: "200",
           props: "operate",
           operate: [
+        
             {
-              text: "更新",
-              type: "other",
+              text: "编辑",
+              type: "edit",
               Show: (row) => {
                 return true;
               },
-              click: (row, index) => {
-                daZhangAdd({ memberMobile: row.memberMobile })
-                  .then((res) => {
-                    // console.log(res, "res添加手机号");
-                    this.init();
-                    this.$message({
-                      message: res.meta.msg,
-                      type: "success",
-                    });
-                  })
-                  .catch((err) => {
-                    // console.log(err.meta.msg,'sss');
-                    this.$message.error(err.meta.msg);
-                  });
-              },
             },
-            // {
-            //   text: "编辑",
-            //   type: "edit",
-            //   Show: (row) => {
-            //     return false;
-            //   },
-            // },
             {
-              text: "备注",
-              type: "other",
+              text: "删除",
+              type: "delete",
+              url: "/daZhangXinxi/deleteData",
               Show: (row) => {
                 return true;
               },
-              click: (row, index) => {
-                if (!row.logistics) {
-                  return;
-                }
-              },
             },
-            // {
-            //   text: "删除",
-            //   type: "other",
-            //   Show: (row) => {
-            //     return true;
-            //   },
-            //   click: (row, index) => {
-            //     let data = {
-            //       id: row.id,
-            //     };
-            //     getData("/order/putDelete", data)
-            //       .then((res) => {
-            //         this.init();
-            //       })
-            //       .catch((err) => {});
-            //   },
-            // },
-            // {
-            //   text: "删除",
-            //   type: "delete",
-            //   url:'url',
-            //   Show: (row) => {
-            //     return true;
-            //   },
-            // },
           ],
         },
         {

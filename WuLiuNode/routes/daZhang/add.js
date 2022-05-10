@@ -1,7 +1,9 @@
 var request = require('request');
 var qs = require('querystring');
 const jwt = require('jsonwebtoken')
-
+const {
+    tryErrorFun
+} = require('../../src/until/returnFun')
 const {
     daZhang
 } = require('../../database/model/daZhang')
@@ -146,8 +148,7 @@ module.exports = async (req, res) => {
                     return
                 })
             } catch (d) {
-                res.send(d)
-
+                tryErrorFun(res,d)
             }
 
         }
