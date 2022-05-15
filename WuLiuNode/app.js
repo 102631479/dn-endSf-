@@ -58,14 +58,14 @@ app.get('/', (req, res) => {
 
 
 app.use('/api', async (req, res, next) => {
-    // next()
-    // return
+    next()
+    return
     // if (req.url == '/login' || req.url == '/register' || req.url == '/redisTest') {
     //     // // console.log(req.body,'1111');
     //     next()
     //     return
     // }
-    if (req.url == '/login') {
+    if (req.url == '/login'|| req.url == '/yuyue') {
         // // console.log(req.body,'1111');
         next()
         return

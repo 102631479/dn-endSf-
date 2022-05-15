@@ -24,7 +24,8 @@ main.get('/daZhangXinxi/getData', require('./daZhangXinxi/get'))
 main.post('/daZhangXinxi/addData', require('./daZhangXinxi/add'))
 main.put('/daZhangXinxi/putData', require('./daZhangXinxi/put'))
 main.delete('/daZhangXinxi/deleteData', require('./daZhangXinxi/dele'))
-
+// 预约测试
+main.get('/yuyue', require('./daZhang/yuyue'))
 
 
 
