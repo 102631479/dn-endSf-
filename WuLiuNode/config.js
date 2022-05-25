@@ -38,9 +38,6 @@ if (test) {
     config = configDev
 }
 
-
-
-
 module.exports = {
     config
 }
